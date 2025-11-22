@@ -15,20 +15,18 @@
 </head>
 <body>
     <div class="container">
-        <h2>Admin Login</h2>
-        <input type="email" id="email" placeholder="Email" required />
-        <input type="password" id="password" placeholder="Password" required />
-        <button onclick="login()">Login</button>
-        <div id="login-error" style="color:red;"></div>
-        <div class="crud-section" id="crud-section">
-            <h2>CRUD Data</h2>
-            <button onclick="logout()">Logout</button>
-            <div>
-                <input type="text" id="newData" placeholder="New Data" />
-                <button onclick="createData()">Create</button>
-            </div>
-            <div id="data-list"></div>
-        </div>
+        <h1>Admin - Profil IKM</h1>
+        <form class="add-form" id="addForm">
+            <h2>Tambah Produk IKM</h2>
+            <input type="text" id="name" placeholder="Nama IKM" required />
+            <input type="text" id="type" placeholder="Jenis Produk" required />
+            <input type="text" id="location" placeholder="Lokasi" required />
+            <input type="text" id="logoImage" placeholder="URL Logo" />
+            <input type="text" id="imageUrl" placeholder="URL Gambar Utama" />
+            <textarea id="description" placeholder="Deskripsi" rows="3"></textarea>
+            <button type="submit">Tambah Produk</button>
+        </form>
+        <div class="product-grid" id="productGrid"></div>
     </div>
     <script>
         // Example Supabase project URL and anon key
@@ -92,3 +90,4 @@
     </script>
 </body>
 </html>
+
