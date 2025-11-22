@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog IKM Direktorat Industri Aneka</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background: #ffffff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: slideDown 0.6s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px 30px;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e8ecef;
+        }
+
+        .header-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .header-logo img {
+            max-height: 100px;
+            width: auto;
+            object-fit: contain;
+ 
+        }
+
+        .header-title {
+            text-align: center;
+            color: #0066cc;
+            font-size: 32px;
+            font-weight: 700;
+            margin-top: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Navigation */
+        nav {
+            margin-top: 15px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: #5a6c7d;
+            text-decoration: none;
+            padding: 12px 32px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 15px;
+            display: block;
+            border: 2px solid transparent;
+        }
+
+        nav a:hover {
+            background: #f0f4f8;
+            color: #0066cc;
+            border-color: #0066cc;
+        }
+
+        nav a.active {
+            background: #0066cc;
+            color: white;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.25);
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 50px 30px;
+            min-height: calc(100vh - 400px);
+        }
+
+        /* Beranda Section */
+        .beranda-section {
+            text-align: center;
+            padding: 80px 20px;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .beranda-logo {
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 40px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+            overflow: hidden;
+            padding: 25px;
+            border: 5px solid #e8ecef;
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .beranda-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .beranda-description {
+            font-size: 26px;
+            color: #2c3e50;
+            margin-bottom: 45px;
+            font-weight: 500;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .beranda-description .highlight {
+             display: block;         /* ← Membuat turun ke baris baru */
+            color: #0066cc;         /* ← Warna biru */
+            font-weight: 600;       /* ← Lebih tebal */
+            margin-top: 10px;       /* ← Jarak dari teks atas */
+        }
+
+        .btn-telusuri {
+            background: #0066cc;
+            color: white;
+            padding: 18px 55px;
+            border: none;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.25);
+        }
+
+        .btn-telusuri:hover {
+            background: #0052a3;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 102, 204, 0.35);
+        }
+
+        .btn-telusuri:active {
+            transform: translateY(-1px);
+        }
+
+        /* Katalog Section */
+        .katalog-section {
+            animation: fadeIn 0.8s ease;
+        }
+
+        .katalog-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .katalog-header h2 {
+            font-size: 36px;
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+
+        .katalog-header p {
+            font-size: 16px;
+            color: #5a6c7d;
+        }
+
+        .search-filter-container {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 45px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .search-box input {
+            flex: 1;
+            min-width: 280px;
+            padding: 15px 24px;
+            border: 2px solid #e8ecef;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group select {
+            padding: 15px 24px;
+            border: 2px solid #e8ecef;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #0066cc;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 35px;
+            align-items: stretch;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: slideUp 0.6s ease;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            border-color: #0066cc;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 100%);
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .product-image span {
+            position: relative;
+            z-index: 2;
+        }
+
+        .product-info {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .product-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+            padding-bottom: 18px;
+            border-bottom: 2px solid #f0f4f8;
+        }
+
+        .product-logo {
+            width: 55px;
+            height: 55px;
+            background: #f0f4f8;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #5a6c7d;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .product-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 8px; /* Slightly rounded corners for aesthetic */
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            line-height: 1.3;
+            /* fallback height for very old browsers */
+            max-height: calc(1.3em * 2);
+            min-height: 48px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* WebKit-based clamping */
+            line-clamp: 2;         /* Standard (unprefixed) property */
+            -webkit-box-orient: vertical;
+            box-orient: vertical;  /* legacy/unprefixed variant */
+            overflow: hidden;
+            text-overflow: ellipsis; /* non-perfect fallback for some browsers */
+        }
+
+        .product-type {
+            color: #5a6c7d;
+            font-size: 14px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .product-location {
+            color: #7a8a9e;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-detail {
+            width: 100%;
+            padding: 14px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            margin-top: auto;
+        }
+
+        .btn-detail:hover {
+            background: #0052a3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 102, 204, 0.3);
+        }
+
+        /* Detail Section */
+        .detail-section {
+            animation: fadeIn 0.8s ease;
+        }
+
+        .detail-container {
+            background: white;
+            border-radius: 16px;
+            padding: 45px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .detail-header {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 45px;
+            flex-wrap: wrap;
+            padding-bottom: 35px;
+            border-bottom: 3px solid #f0f4f8;
+        }
+
+        .detail-image {
+            flex: 0 0 420px;
+            height: 420px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .detail-image span {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Carousel styles for detail view */
+        .detail-carousel {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-slides {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-slide {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 300ms ease, transform 300ms ease;
+            transform: translateX(0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+            position: relative;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.45);
+            color: white;
+            border: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 4;
+            transition: background 0.2s ease;
+        }
+
+        .carousel-nav:hover { background: rgba(0,0,0,0.6); }
+
+        .carousel-nav.prev { left: 14px; }
+        .carousel-nav.next { right: 14px; }
+
+        .carousel-indicators {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 5;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.6);
+            cursor: pointer;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+
+        .indicator.active {
+            background: white;
+            transform: scale(1.15);
+        }
+
+        .detail-main-info {
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .detail-logo-name {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .detail-logo {
+            width: 100px;
+            height: 80px;
+            background: #f0f4f8;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 600;
+            color: #5a6c7d;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .detail-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 12px; /* Larger radius for detail view */
+        }
+
+        .detail-company-name {
+            font-size: 36px;
+            font-weight: 700;
+            color: #0066cc;
+            line-height: 1.2;
+        }
+
+        .detail-description {
+            color: #5a6c7d;
+            line-height: 1.9;
+            margin-bottom: 35px;
+            font-size: 16px;
+        }
+
+        .detail-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 35px;
+        }
+
+        .info-item {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #0066cc;
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            background: #f0f4f8;
+            transform: translateX(5px);
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #0066cc;
+            margin-bottom: 8px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #2c3e50;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .contact-section {
+            margin-top: 45px;
+            padding: 35px;
+            background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+            border-radius: 16px;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 102, 204, 0.25);
+        }
+
+        .contact-title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .contact-item {
+            font-size: 15px;
+            line-height: 1.8;
+            padding: 18px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .contact-item strong {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 16px;
+        }
+
+        .btn-back {
+            margin-bottom: 35px;
+            padding: 14px 35px;
+            background: #5a6c7d;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-back:hover {
+            background: #465766;
+            transform: translateX(-5px);
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 50px 30px;
+            margin-top: 80px;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-address {
+            font-size: 16px;
+            margin-bottom: 30px;
+            line-height: 1.9;
+            opacity: 0.95;
+        }
+
+        .footer-address strong {
+            font-size: 18px;
+            display: block;
+            margin-bottom: 12px;
+            color: #0066cc;
+        }
+
+        .footer-social {
+            margin-bottom: 25px;
+        }
+
+        .instagram-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+            text-decoration: none;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .instagram-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(225, 48, 108, 0.4);
+        }
+
+        .footer-copyright {
+            font-size: 14px;
+            opacity: 0.8;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Hidden Class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 60px;
+            color: #5a6c7d;
+            font-size: 18px;
+        }
+
+        /* Pagination Styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 40px;
+        }
+
+        .pagination button {
+            padding: 10px 20px;
+            border: 2px solid #e8ecef;
+            background: white;
+            color: #5a6c7d;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            min-width: 45px;
+        }
+
+        /* Page numbers container */
+        #pageNumbers {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        /* Ellipsis style */
+        .ellipsis {
+            color: #5a6c7d;
+            padding: 8px 6px;
+            font-weight: 700;
+            opacity: 0.9;
+        }
+
+        .pagination button:hover {
+            border-color: #0066cc;
+            color: #0066cc;
+            background: #f0f4f8;
+        }
+
+        .pagination button.active {
+            background: #0066cc;
+            color: white;
+            border-color: #0066cc;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: #e8ecef;
+            color: #5a6c7d;
+            background: #f8f9fa;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 24px;
+            }
+
+            .header-logo img {
+                max-height: 70px;
+            }
+
+            .beranda-description {
+                font-size: 20px;
+            }
+
+            .beranda-logo {
+                width: 180px;
+                height: 180px;
+            }
+
+            /* Katalog Header Mobile */
+            .katalog-header h2 {
+                font-size: 24px;
+            }
+
+            .katalog-header p {
+                font-size: 14px;
+            }
+
+            /* Search & Filter Mobile */
+            .search-filter-container {
+                padding: 20px;
+            }
+
+            .search-box input {
+                min-width: 100%;
+                padding: 12px 18px;
+                font-size: 14px;
+            }
+
+            .filter-group {
+                flex-direction: column;
+            }
+
+            .filter-group select {
+                min-width: 100%;
+                padding: 12px 18px;
+                font-size: 14px;
+            }
+
+            /* Product Grid Mobile - 2 kolom */
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            .product-card {
+                border-radius: 12px;
+                min-height: 340px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .product-image {
+                height: 120px;
+                font-size: 12px;
+                flex-shrink: 0;
+            }
+
+            .product-info {
+                padding: 12px;
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+            }
+
+            .product-header {
+                flex-direction: row;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+                padding-bottom: 10px;
+                flex-shrink: 0;
+            }
+
+            .product-logo {
+                width: 40px;
+                height: 40px;
+                font-size: 11px;
+                flex-shrink: 0;
+            }
+
+            .product-name {
+                font-size: 13px;
+                min-height: 34px;
+                line-height: 1.3;
+                flex: 1;
+            }
+
+            .product-type, .product-location {
+                font-size: 11px;
+                margin-bottom: 6px;
+                flex-shrink: 0;
+            }
+
+            .btn-detail {
+                padding: 10px;
+                font-size: 12px;
+                margin-top: auto;
+                flex-shrink: 0;
+            }
+
+            /* Detail Page Mobile */
+            .detail-image {
+                flex: 0 0 100%;
+                height: 280px;
+            }
+
+            .detail-company-name {
+                font-size: 28px;
+            }
+
+            .detail-container {
+                padding: 25px;
+            }
+
+            .detail-description {
+                font-size: 14px;
+            }
+
+            .info-item {
+                padding: 15px;
+            }
+
+            .info-label {
+                font-size: 12px;
+            }
+
+            .info-value {
+                font-size: 13px;
+            }
+
+            .contact-section {
+                padding: 20px;
+            }
+
+            .contact-title {
+                font-size: 20px;
+            }
+
+            .contact-item {
+                font-size: 13px;
+                padding: 12px;
+            }
+        }
+
+        /* Mobile Extra Small (max-width: 480px) */
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 20px;
+            }
+
+            .katalog-header h2 {
+                font-size: 20px;
+            }
+
+            .katalog-header p {
+                font-size: 13px;
+            }
+
+            .search-filter-container {
+                padding: 15px;
+            }
+
+            .product-grid {
+                gap: 12px;
+            }
+
+            .product-card {
+                min-height: 290px;
+            }
+
+            .product-card {
+                min-height: 310px;
+            }
+
+            .product-image {
+                height: 100px;
+                font-size: 11px;
+            }
+
+            .product-info {
+                padding: 10px;
+            }
+
+            .product-name {
+                font-size: 12px;
+                min-height: 32px;
+            }
+
+            .product-type, .product-location {
+                font-size: 10px;
+            }
+
+            .btn-detail {
+                padding: 9px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="header-top">
+              <div class="header-logo">
+                    <img src="Assets/Logo SIPIKA No Background.png" alt="Logo Website">
+                </div>  
+            </div>
+            <h1 class="header-title">Direktorat Industri Aneka</h1>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-page="beranda">Beranda</a></li>
+                    <li><a href="#" class="nav-link" data-page="katalog">Katalog</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Beranda Section -->
+        <section id="beranda" class="beranda-section">
+            <div class="beranda-logo">
+                <img src="Assets/LOGO DIT ANEKA NO BACKGROUND.png" alt="Direktorat Industri Aneka">
+            </div>
+            <p class="beranda-description">Selamat Datang di Website Katalog IKM Direktorat Industri Aneka</p>
+    <span class="highlight"></span>
+</p>
+                <button class="btn-telusuri" onclick="showPage('katalog')">Telusuri Produk</button>
+    <!-- Admin Login Button -->
+    <div style="text-align:right; margin:20px;">
+        <a href="admin.html" style="padding:10px 20px; background:#007bff; color:#fff; border-radius:5px; text-decoration:none; font-weight:bold;">Admin Login</a>
+    </div>
+        </section>
+
+        <!-- Katalog Section -->
+        <section id="katalog" class="katalog-section hidden">
+            <div class="katalog-header">
+                <h2>Katalog Produk IKM</h2>
+                <p>Temukan berbagai produk IKM binaan Direktorat Industri Aneka</p>
+            </div>
+
+            <div class="search-filter-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="🔍 Cari nama IKM atau produk...">
+                </div>
+                <div class="filter-group">
+                    <select id="categoryFilter">
+                        <option value="">Semua Kategori Produk</option>
+                        <option value="Mainan">Mainan</option>
+                        <option value="Tekstil">Tekstil</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Makanan">Makanan & Minuman</option>
+                        <option value="Fashion">Fashion</option>
+                    </select>
+                    <select id="locationFilter">
+                        <option value="">Semua Wilayah</option>
+                        <option value="Jakarta">DKI Jakarta</option>
+                        <option value="Jawa Barat">Jawa Barat</option>
+                        <option value="Jawa Tengah">Jawa Tengah</option>
+                        <option value="Jawa Timur">Jawa Timur</option>
+                        <option value="Bali">Bali</option>
+                        <option value="Sumatera">Sumatera</option>
+                        <option value="Lampung">Lampung</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="product-grid" id="productGrid"></div>
+            <div class="pagination" id="pagination">
+                <button id="prevPage" onclick="changePage('prev')" disabled>← Prev</button>
+                <div id="pageNumbers"></div>
+                <button id="nextPage" onclick="changePage('next')">Next →</button>
+            </div>
+        </section>
+
+        <!-- Detail Section -->
+        <section id="detail" class="detail-section hidden">
+            <button class="btn-back" onclick="showPage('katalog')">
+                <span>←</span> Kembali ke Katalog
+            </button>
+            <div class="detail-container" id="detailContainer"></div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-address">
+                <strong>Direktorat Industri Aneka</strong>
+                Kementerian Perindustrian Republik Indonesia<br>
+                Jl. Jenderal Gatot Subroto Kav. 52-53, Jakarta Selatan 12950<br>
+                Telp: (021) 525 2407 | Email: dit.aneka@kemenperin.go.id
+            </div>
+            <div class="footer-social">
+                <a href="https://instagram.com/dit_aneka" target="_blank" class="instagram-link">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                    @dit_aneka
+                </a>
+            </div>
+            <div class="footer-copyright">
+                © 2025 Direktorat Industri Aneka, Kementerian Perindustrian Republik Indonesia
+            </div>
+        </div>
+    </footer>
+
+    <script>
+                // Initial fetch from Supabase
+                fetchProducts();
+
+        // Pagination helper functions
+        function getTotalPages() {
+            return Math.ceil(currentProducts.length / itemsPerPage);
+        }
+
+        function getPageItems() {
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            return currentProducts.slice(startIndex, startIndex + itemsPerPage);
+        }
+
+        function updatePaginationControls() {
+            const totalPages = getTotalPages();
+            const prevButton = document.getElementById('prevPage');
+            const nextButton = document.getElementById('nextPage');
+            const pageNumbers = document.getElementById('pageNumbers');
+
+            // Update prev/next buttons
+            prevButton.disabled = currentPage === 1 || totalPages === 0;
+            nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+            // Update page numbers (max 3 shown) with ellipsis when needed
+            pageNumbers.innerHTML = '';
+
+            if (totalPages <= 3) {
+                for (let i = 1; i <= totalPages; i++) {
+                    const button = document.createElement('button');
+                    button.textContent = i;
+                    button.onclick = () => goToPage(i);
+                    if (i === currentPage) button.classList.add('active');
+                    pageNumbers.appendChild(button);
+                }
+            } else {
+                // determine a three-page window centered on current when possible
+                let start = currentPage - 1;
+                if (start < 1) start = 1;
+                if (start > totalPages - 2) start = totalPages - 2;
+
+                for (let i = start; i <= start + 2; i++) {
+                    const button = document.createElement('button');
+                    button.textContent = i;
+                    button.onclick = () => goToPage(i);
+                    if (i === currentPage) button.classList.add('active');
+                    pageNumbers.appendChild(button);
+                }
+
+                // if there are pages after the shown window, append ellipsis
+                if (start + 2 < totalPages) {
+                    const ell = document.createElement('span');
+                    ell.className = 'ellipsis';
+                    ell.textContent = '...';
+                    pageNumbers.appendChild(ell);
+                }
+            }
+        }
+
+        function changePage(direction) {
+            if (direction === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (direction === 'next' && currentPage < getTotalPages()) {
+                currentPage++;
+            }
+            renderProducts();
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderProducts();
+        }
+
+        // Supabase credentials (use your own for production)
+                const SUPABASE_URL = 'https://wfkxsljtazosiozmxyij.supabase.co';
+                const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indma3hzbGp0YXpvc2lvem14eWlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3NzM0OTIsImV4cCI6MjA3OTM0OTQ5Mn0.3iw0MHXhLPhtP4wng1pXmqfOSGDG5_kMSxivqL6rIjU';
+                const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+                let products = [];
+                let currentProducts = [];
+                let currentPage = 1;
+                const itemsPerPage = 6;
+
+                async function fetchProducts() {
+                    const { data, error } = await supabase.from('products').select('*');
+                    if (error) {
+                        console.error('Supabase fetch error:', error.message);
+                        products = [];
+                    } else {
+                        products = data || [];
+                    }
+                    currentProducts = [...products];
+                    renderProducts();
+                }
+
+                // Initial fetch from Supabase
+                fetchProducts();
+
+                function getTotalPages() {
+                    return Math.ceil(currentProducts.length / itemsPerPage);
+                }
+
+                function getPageItems() {
+                    const startIndex = (currentPage - 1) * itemsPerPage;
+                    return currentProducts.slice(startIndex, startIndex + itemsPerPage);
+                }
+
+                function updatePaginationControls() {
+                    const totalPages = getTotalPages();
+                    const prevButton = document.getElementById('prevPage');
+                    const nextButton = document.getElementById('nextPage');
+                    const pageNumbers = document.getElementById('pageNumbers');
+
+                    prevButton.disabled = currentPage === 1 || totalPages === 0;
+                    nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+                    pageNumbers.innerHTML = '';
+
+                    if (totalPages <= 3) {
+                        for (let i = 1; i <= totalPages; i++) {
+                            const button = document.createElement('button');
+                            button.textContent = i;
+                            button.onclick = () => goToPage(i);
+                            if (i === currentPage) button.classList.add('active');
+                            pageNumbers.appendChild(button);
+                        }
+                    } else {
+                        let start = currentPage - 1;
+                        if (start < 1) start = 1;
+                        if (start > totalPages - 2) start = totalPages - 2;
+
+                        for (let i = start; i <= start + 2; i++) {
+                            const button = document.createElement('button');
+                            button.textContent = i;
+                            button.onclick = () => goToPage(i);
+                            if (i === currentPage) button.classList.add('active');
+                            pageNumbers.appendChild(button);
+                        }
+
+                        if (start + 2 < totalPages) {
+                            const ell = document.createElement('span');
+                            ell.className = 'ellipsis';
+                            ell.textContent = '...';
+                            pageNumbers.appendChild(ell);
+                        }
+                    }
+                }
+
+                function changePage(direction) {
+                    if (direction === 'prev' && currentPage > 1) {
+                        currentPage--;
+                    } else if (direction === 'next' && currentPage < getTotalPages()) {
+                        currentPage++;
+                    }
+                    renderProducts();
+                }
+
+                function goToPage(page) {
+                    currentPage = page;
+                    renderProducts();
+                }
+                
+        // Navigation Function
+        function showPage(pageName) {
+            document.querySelectorAll('main > section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById(pageName).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.page === pageName) {
+                    link.classList.add('active');
+                }
+            });
+
+            if (pageName === 'katalog') {
+                renderProducts();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Products Function
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            if (currentProducts.length === 0) {
+                grid.innerHTML = '<div class="loading">Tidak ada produk yang ditemukan.</div>';
+                return;
+            }
+
+            // Get items for current page
+            const pageItems = getPageItems();
+            
+            pageItems.forEach((product, index) => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.innerHTML = `
+                    <div class="product-image">
+                        ${product.imageUrl ? 
+                          `<img src="${product.imageUrl}" alt="${product.name}" loading="lazy">` 
+                          : '<span>Foto Produk</span>'}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-header">
+                            <div class="product-logo">
+                                ${product.logoImage ? `<img src="${product.logoImage}" loading="lazy" alt="${product.name}">` : product.logo}
+                            </div>
+                            <div class="product-name">${product.name}</div>
+                        </div>
+                        <div class="product-type">📦 ${product.type}</div>
+                        <div class="product-location">📍 ${product.location}</div>
+                        <button class="btn-detail" onclick="showDetail(${product.id})">Lihat Detail</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Update pagination controls after rendering
+            updatePaginationControls();
+        }
+
+        // Show Detail Function
+        function showDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            // prepare images array: prefer product.images (array), fallback to single imageUrl
+            const images = (Array.isArray(product.images) && product.images.length) ? product.images : (product.imageUrl ? [product.imageUrl] : []);
+
+            const container = document.getElementById('detailContainer');
+
+            // Build carousel slides markup
+            let carouselHtml = '';
+            if (images.length > 0) {
+                const slides = images.map((imgSrc, i) => `
+                    <div class="carousel-slide ${i === 0 ? 'active' : ''}"><img src="${imgSrc}" alt="${product.name} - ${i+1}"></div>
+                `).join('');
+
+                const indicators = images.map((_, i) => `
+                    <div class="indicator ${i === 0 ? 'active' : ''}" data-index="${i}" aria-label="Pilih gambar ${i+1}"></div>
+                `).join('');
+
+                carouselHtml = `
+                    <div class="detail-image">
+                        <div class="detail-carousel">
+                            <button class="carousel-nav prev" aria-label="Gambar sebelumnya">‹</button>
+                            <div class="carousel-slides">
+                                ${slides}
+                            </div>
+                            <button class="carousel-nav next" aria-label="Gambar berikutnya">›</button>
+                            <div class="carousel-indicators">${indicators}</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                carouselHtml = `
+                    <div class="detail-image">
+                        <span>Foto Produk</span>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `
+                <div class="detail-header">
+                    ${carouselHtml}
+                    <div class="detail-main-info">
+                        <div class="detail-logo-name">
+                            <div class="detail-logo">
+                                ${product.logoImage ? `<img src="${product.logoImage}" alt="${product.name}">` : product.logo}
+                            </div>
+                            <div class="detail-company-name">${product.name}</div>
+                        </div>
+                        <div class="detail-description">${product.description}</div>
+                    </div>
+                </div>
+
+                <div class="detail-info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Jenis Produk</div>
+                        <div class="info-value">${product.type}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Lokasi</div>
+                        <div class="info-value">${product.location}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Jenis Fasilitas yang Diikuti</div>
+                        <div class="info-value">${product.facility}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Sertifikasi</div>
+                        <div class="info-value">${product.certification}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Metode Pemasaran</div>
+                        <div class="info-value">${product.marketing}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Media Sosial</div>
+                        <div class="info-value">${product.socialMedia}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Lokapasar (Marketplace)</div>
+                        <div class="info-value">${product.marketplace}</div>
+                    </div>
+                </div>
+
+                <div class="contact-section">
+                    <div class="contact-title">
+                        📞 Informasi Kontak
+                    </div>
+                    <div class="contact-grid">
+                        <div class="contact-item">
+                            <strong>📍 Alamat</strong>
+                            ${product.address}
+                        </div>
+                        <div class="contact-item">
+                            <strong>📞 Telepon</strong>
+                            ${product.phone}
+                        </div>
+                        <div class="contact-item">
+                            <strong>📧 Email</strong>
+                            ${product.email}
+                        </div>
+                        <div class="contact-item">
+                            <strong>🌐 Website</strong>
+                            ${product.website}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Initialize carousel (if images exist)
+            if (images.length > 0) {
+                const carouselEl = container.querySelector('.detail-carousel');
+                initDetailCarousel(carouselEl, images);
+            }
+
+            showPage('detail');
+        }
+
+        // Initialize a detail carousel element with given images
+        function initDetailCarousel(carouselEl, images) {
+            if (!carouselEl) return;
+            const slidesContainer = carouselEl.querySelector('.carousel-slides');
+            const slides = Array.from(slidesContainer.querySelectorAll('.carousel-slide'));
+            const prevBtn = carouselEl.querySelector('.carousel-nav.prev');
+            const nextBtn = carouselEl.querySelector('.carousel-nav.next');
+            const indicators = Array.from(carouselEl.querySelectorAll('.indicator'));
+            let current = 0;
+
+            function update() {
+                slides.forEach((s, i) => s.classList.toggle('active', i === current));
+                indicators.forEach((ind, i) => ind.classList.toggle('active', i === current));
+                // hide navs if only one image
+                if (images.length <= 1) {
+                    prevBtn.style.display = 'none';
+                    nextBtn.style.display = 'none';
+                    carouselEl.querySelector('.carousel-indicators').style.display = 'none';
+                } else {
+                    prevBtn.style.display = '';
+                    nextBtn.style.display = '';
+                    carouselEl.querySelector('.carousel-indicators').style.display = '';
+                }
+            }
+
+            function goTo(idx) {
+                current = (idx + images.length) % images.length;
+                update();
+            }
+
+            prevBtn.onclick = () => goTo(current - 1);
+            nextBtn.onclick = () => goTo(current + 1);
+            indicators.forEach(ind => ind.addEventListener('click', (e) => {
+                const idx = parseInt(ind.dataset.index, 10);
+                goTo(idx);
+            }));
+
+            // Allow left/right arrow keys when detail is open
+            carouselEl.tabIndex = 0;
+            carouselEl.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') prevBtn.click();
+                if (e.key === 'ArrowRight') nextBtn.click();
+            });
+
+            update();
+        }
+
+        // Search and Filter Function
+        function filterProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const locationFilter = document.getElementById('locationFilter').value;
+
+            currentProducts = products.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
+                                     product.type.toLowerCase().includes(searchTerm) ||
+                                     product.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = !categoryFilter || product.category === categoryFilter;
+                const matchesLocation = !locationFilter || product.location === locationFilter;
+
+                return matchesSearch && matchesCategory && matchesLocation;
+            });
+
+            renderProducts();
+            updatePaginationControls(); // Update pagination after filtering
+        }
+
+        // Event Listeners
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                showPage(link.dataset.page);
+            });
+        });
+
+        document.getElementById('searchInput').addEventListener('input', filterProducts);
+        document.getElementById('categoryFilter').addEventListener('change', filterProducts);
+        document.getElementById('locationFilter').addEventListener('change', filterProducts);
+
+        // Initial render
+        renderProducts();
+    </script>
+</body>
+</html>
