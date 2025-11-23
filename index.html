@@ -1196,8 +1196,9 @@
     </footer>
 
     <script>
-                // Initial fetch from Supabase
-                fetchProducts();
+        // Pagination variables
+        let currentPage = 1;
+        const itemsPerPage = 6;
 
         // Pagination helper functions
         function getTotalPages() {
@@ -1268,94 +1269,1489 @@
             renderProducts();
         }
 
-        // Supabase credentials (use your own for production)
-                const SUPABASE_URL = 'https://wfkxsljtazosiozmxyij.supabase.co';
-                const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indma3hzbGp0YXpvc2lvem14eWlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM3NzM0OTIsImV4cCI6MjA3OTM0OTQ5Mn0.3iw0MHXhLPhtP4wng1pXmqfOSGDG5_kMSxivqL6rIjU';
-                const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-                let products = [];
-                let currentProducts = [];
-                let currentPage = 1;
-                const itemsPerPage = 6;
+        // Sample Data - Produk IKM
+        const products = [
+            {
+                id: 1,
+                name: "PT. Aulian Kreasi Gemilang",
+                logo: "KM",
+                logoImage: "Assets/PT AULIAN KREASI GEMILANG/LOGO AULIAN.jpeg",
+                imageUrl: "Assets/PT AULIAN KREASI GEMILANG/AULIAN HOME&DETAIL.webp",
+                images: [
+                    "Assets/PT AULIAN KREASI GEMILANG/AULIAN HOME&DETAIL.webp",
+                    "Assets/PT AULIAN KREASI GEMILANG/AULIAN PRODUK 2.webp",
+                    "Assets/PT AULIAN KREASI GEMILANG/AULIAN PRODUK 3.webp"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Lampung",
+                description: "PT. Aulian Kreasi Gemilang didirikan pada tahun 2017 di Bandar Lampung, Lampung. Kami adalah produsen dan distributor alat peraga edukasi, produk kami telah bersetifikasi SNI sehingga aman untuk anak-anak. Produk kami sudah dipasarkan di seluruh Indonesia (TK/Paud, Dinas Pendidikan, Klinik Tumbuh Kembang Anak) yang tersebar di 7 provinsi, 26 kota dan kabupaten.",
+                facility: "Coaching Creative Business Incubator (CBI), Sertifikasi SNI Mainan(DIT.IAIKMKSK) Tahun 2022",
+                certification: "SNI",
+                marketing: "Langsung, dan Maklon",
+                socialMedia: "Instagram: @auliankreasigemilang",
+                marketplace: "Shopee : auliankidstore",
+                address: "Jl. Kepodang VB 11 No. 1C Beringin Raya, Kemiling, Bandar Lampung.",
+                phone: "08117900399",
+                email: "auliankreasigemilang@gmail.com",
+                website: "www.auliankreasigemilang.com"
+            },
+            {
+                id: 2,
+                name: "Bianglala Edutoys",
+                logo: "TN",
+                logoImage: "Assets/BIANGLALA EDUTOYS/LOGOBIANGLALAEDUTOYS.png",
+                imageUrl: "Assets/BIANGLALA EDUTOYS/BIANGLALA HOME&DETAIL.jpg", // Foto belum ditambahkan
+                images: [
+                    "Assets/BIANGLALA EDUTOYS/BIANGLALA HOME&DETAIL.jpg",
+                    "Assets/BIANGLALA EDUTOYS/BIANGLALA PRODUK 2.jpg",
+                    "Assets/BIANGLALA EDUTOYS/BIANGLALA PRODUK 3.jpg"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Timur",
+                description: "CV. Tiara Sukses Globalindo didirikan pada tahun 2008 di surabaya, jawa timur. Kami merupakan produsen mainan anak dengan spesialisasi mainan edukasi. Produk kami terbuat dari kayu lokal yang telah tersertifikasi, aman untuk digunakan anak, seta telah memiliki SNI. Produk mainan CV. Tiara Sukses Globalindo terbuka untuk menjalin kolaborasi mitra bisnis.",
+                facility: "Penyusunan Direktori Perusahaan Industri Mainan Anak (DIT.IAIKMKSK) Tahun 2022",
+                certification: "SNI, ISO, Serifikat Merek",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "-",
+                marketplace: "Blibli : bianglalaedutoys",
+                address: "Ruko 21 Klampis, Blok H-8, Jl Arief Rahman Hakim, Surabaya, Jawa Timur",
+                phone: "082131165050",
+                email: "cv.tiarasuksess@gmail.com",
+                website: "www.bianglalatoys.com"
+            },
+            {
+                id: 3,
+                name: "PT. Krisna Raya Indonesia",
+                logo: "MF",
+                logoImage: "Assets/PT KRISNA RAYA INDONESIA/LOGO PT KRISNA RAYA INDO.jpeg",
+                imageUrl: "Assets/PT KRISNA RAYA INDONESIA/KRISNA HOME&DETAIL.jpg", // Foto belum ditambahkan
+                images: [
+                    "Assets/PT KRISNA RAYA INDONESIA/KRISNA HOME&DETAIL.jpg",
+                    "Assets/PT KRISNA RAYA INDONESIA/KRISNA PRODUK 2.jpg",
+                    "Assets/PT KRISNA RAYA INDONESIA/PRODUK KRISNA 3.webp"
+                ],
+                type: "Ayunan",
+                category: "Mainan",
+                location: "Jawa Barat",
+                description: "PT. Krisna Raya Indonesia didirikan pada tahun 2021, namun sebenarnya usaha ini sudah berjalan dari tahun 2018 di Indramayu, Jawa Barat. Kami merupakan produsen mainan anak berupa ayunan yang terbuat dari tali tepian kain yang telah tersertifikasi, aman untuk digunakan anak maupun dewasa.",
+                facility: "Penyusunan Direktori Perusahaan Industri Mainan Anak dan Sertifikasi SNI (DIT.IAIKMKSK)Tahun 2022",
+                certification: "SNI",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram: @krisnaraya.id",
+                marketplace: "Tokopedia : adimkrisna",
+                address: "Blok Kulon 11 RT 03/02 Indramayu, Jawa Barat.",
+                phone: "087828665277",
+                email: "krisnarayaid@gmail.com",
+                website: "-"
+            },
+            {
+                id: 4,
+                name: "Legowo",
+                logo: "BS",
+                logoImage: "Assets/LEGOWO/LOGO LEGOWO.jpg",
+                imageUrl: "Assets/LEGOWO/ZYFINI HOME&DETAIL.webp", // Foto belum ditambahkan
+                images: [
+                    "Assets/LEGOWO/ZYFINI HOME&DETAIL.webp",
+                    "Assets/LEGOWO/ZYFINI PRODUK 2.webp",
+                    "Assets/LEGOWO/ZYFINI PRODUK 3.webp"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Timur",
+                description: "Legowo didirikan pada tahun 2018 di Tulangan Sidoarjo Jawa Timur. Kami merupakan produsen mainan dengan spesifikasi mainan edukasi. Produk kami terbuat dari kayu lokal yang telah tersertifikasi, sehingga aman digunakan anak, serta memiliki SNI. Produk mainan legowo juga ada yang berbahan besi tentunya dengan kualitas yang baik.",
+                facility: "Penyusunan Direktori Perusahaan Industri Mainan Anak (DIT.IAIKMKSK)Tahun 2022",
+                certification: "SNI",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "-",
+                marketplace: "-",
+                address: "Jl. Peltu Wagiso RT 02 RW 01, Kebaron Kec. Tulangan, Kab. Sidoarjo Prov. Jawa Timur, 61273",
+                phone: "081217674477",
+                email: "rusianaa965@gmail.com",
+                website: "www.legowo.id"
+            },
+            {
+                id: 5,
+                name: "PT. Motoplas",
+                logo: "ON",
+                logoImage: "Assets/PT MOTOPLAS/LOGO MOTOPLAS.png",
+                imageUrl: "Assets/PT MOTOPLAS/MOTOPLAS HOME DETAIL.jpeg", // Foto belum ditambahkan
+                images: [
+                    "Assets/PT MOTOPLAS/MOTOPLAS HOME DETAIL.jpeg",
+                    "Assets/PT MOTOPLAS/MOTOPLAS2.jpeg",
+                    "Assets/PT MOTOPLAS/MOTOPLAS3.jpeg",
+                    "Assets/PT MOTOPLAS/MOTOPLAS4.jpeg"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Barat",
+                description: "Berdiri pada tahun 2005 berlokasi di bogor. Produsen Mandi bola, ring donat, dan lainnya. Dengan target pasar yaitu anak 2-8thn. Dan keuunggulan dari produk ini semua ber-SNI dan aman dimainkan oleh anak-anak.",
+                facility: "Penyusunan Direktori Perusahaan Industri Mainan Anak dan Sertifikasi SNI (DIT.IAIKMKSK)Tahun 2022",
+                certification: "SNI",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram: @motoplas",
+                marketplace: "-",
+                address: "Jln. Jaya blok A1 Ds Cijujung, Sukaraja, Bogor, Jawa Barat 16711",
+                phone: "081281865775",
+                email: "motoplas.mandibola@gmail.com",
+                website: "-"
+            },
+            {
+                id: 6,
+                name: "Papoe",
+                logo: "KI",
+                logoImage: "Assets/PAPOE/LOGO PAPOE.jpg",
+                imageUrl: "Assets/PAPOE/PAPOE HOME DETAIL.webp", // Foto belum ditambahkan
+                images: [
+                    "Assets/PAPOE/PAPOE HOME DETAIL.webp",
+                    "Assets/PAPOE/PAPOE 3.webp",
+                    "Assets/PAPOE/PAPOE 4.webp"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Timur",
+                description: "CV. Putra Putri didirikan di Jombang sejak tahun 2005, kami merupakan produsen mainan anak dengan spesialisasi mainan edukasi. Terbuat dari bahan kayu lokal, aman digunakan untuk anak dan telah memiliki sertifikasi SNI, produk kami sudah dipasarkan diseluruh Indonesia, juga pernah di ekspor sampai ke mancanegara, kami terbuka untuk menjalin kerja sama dan menjalin kolaborasi dengan mitra bisnis.",
+                facility: "Pameran Trade Expo Indonesia Tahun 2022",
+                certification: "SNI dan ISO",
+                marketing: "langsung dan maklon",
+                socialMedia: "Instagram: @papoe_toys",
+                marketplace: "Blibli : toyspapoe",
+                address: "Perum Candi Indah Blok G No.4 Jombang, Jawa Timur",
+                phone: "082335255548",
+                email: "cvpapoe@gmail.com",
+                website: "toyspapoe.com"
+            },
+            {
+                id: 7,
+                name: "Puna Indonesia",
+                logo: "KI",
+                logoImage: "Assets/PUNA INDO/LOGO PUNA.jpg",
+                imageUrl: "Assets/PUNA INDO/PUNA HOME DETAIL.jpeg", // Foto belum ditambahkan
+                images: [
+                    "Assets/PUNA INDO/PUNA HOME DETAIL.jpeg",
+                    "Assets/PUNA INDO/PUNA 1.jpeg",
+                    "Assets/PUNA INDO/PUNA 2.jpeg",
+                    "Assets/PUNA INDO/PUNA 3.jpeg"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Barat",
+                description: "Puna indonesia merupakan usaha rintisan berbasis SE (Social Enterprise) yang fokus dibidang kesehatan dan lingkungan secara luas serta berkultur budaya ke Indonesiaan, dimana salah satu visinya yaitu meningkatkan derajat kesehatan masyarakat yang setinggi-tingginya dengan berbagai produk dan layanan yang kami buat. berdiri pada tahun 2019 di Jawa Barat, sejauh ini sudah ada berbagai produk dan layanan, salah satunya PunaGames, merupakan permainan papan (board game) edukatif interaktif dibidang kesehatan dan lingkungan yang sudah memiliki SNI mainan anak, untuk edisi pertama diberi judul PunaGames : Healthy Society (Sehat bermasyarakat) mengedukasi pemain untuk selain peduli dengan kesehatan pribadi, kita juga harus peduli dengan kesehatan lingkungan sekitar yang harus dijaga secara bersama-sama.",
+                facility: "Sertifikasi SNI Mainan Anak (DIT.IAIKMKSK) Tahun 2022",
+                certification: "SNI dan HKI",
+                marketing: "Maklon",
+                socialMedia: "Instagram: @punaindonesia.id/@punagames",
+                marketplace: "-",
+                address: "Pondok Karadenan Asri 2 Blok P10 RT 10 RW 07 Kel. Karadenan Kec. Cibinong Kab. Bogor, Jawa Barat Indonesia",
+                phone: "081287913266",
+                email: "muhammadlutfi12345678@gmail.com",
+                website: "www.punaindonesia.id"
+            },
+            {
+                id: 8,
+                name: "Sanggar Anakita",
+                logo: "KM",
+                logoImage: "Assets/SanggarAnakita/LOGO SANGGAR ANAKITA.jpeg",
+                imageUrl: "Assets/SanggarAnakita/SANGGARANAKITA HOMEDETAIL.jpeg",
+                images: [
+                    "Assets/SanggarAnakita/SANGGARANAKITA HOMEDETAIL.jpeg",
+                    "Assets/SanggarAnakita/PRODUK SANGGAR 2.jpeg",
+                    "Assets/SanggarAnakita/PRODUK SANGGAR 3.jpeg",
+                    "Assets/SanggarAnakita/PRODUK SANGGAR 4.avif"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Barat",
+                description: "Sanggar Anakita adalah industri rumahan yang memproduksi mainan dan alat peraga edukatif (APE) dari kayu dan MDF. Sanggar Anakita memproduksi mainan dengan merek Sanggar Anakita Toys. Sangggar Anakita Toys telah mampu memberdayakan pemuda-pemudi sekitar lingkungan workshop. Selain itu, produk mainan kami telah menjalin kerjasama dengan Dinas Pendidikan kota Tasikmalaya dan kabupaten Ciamis, sejak 12 Juni 2014 sampai sekarang. Saat ini jangkauan pemasaran secara online masih dalam tahap berkembang.",
+                facility: "Restrukturisasi Mesin dan/atau peralatan Sertifikasi SNI Mainan Anak",
+                certification: "SNI, Lspro Sucofindo International Certification Services, Ags, dan Qualis",
+                marketing: "maklon",
+                socialMedia: "Instagram: @sanggaranakita",
+                marketplace: "-",
+                address: "Kp. Depok Rancageneng RT04/03 Suakajaya, Bungursari, Tasikmalaya, Jawa Barat",
+                phone: "081323312269",
+                email: "sanggaranakita09@gmail.com",
+                website: "-"
+            },
+            {
+                id: 9,
+                name: "Unggul Mukti Toys",
+                logo: "TN",
+                logoImage: "Assets/Unggul Mukti Toys/LOGO UMT.jpeg",
+                imageUrl: "Assets/Unggul Mukti Toys/UMT PRODUK HOMEDETAIL.jpeg", // Foto belum ditambahkan
+                images: [
+                    "Assets/Unggul Mukti Toys/UMT PRODUK HOMEDETAIL.jpeg",
+                    "Assets/Unggul Mukti Toys/UMT PRODUK 2.jpeg",
+                    "Assets/Unggul Mukti Toys/UMT PRODUK 3.jpeg",
+                    "Assets/Unggul Mukti Toys/UMT PRODUK 4.jpeg"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Barat",
+                description: "Mulai usaha pada tahun 1998, terinspirasi dari tempat bekerja yang pabriknya pindah ke Vietnam. Mulai membuka usaha boneka dengan dorongan dari teman-teman kerja yang mengganggur karena PHK. Terkait dengan pemasaran kami mencari distributor yang ada dijakarta dengan menawarkan beberapa item boneka dan diterima dengan baik karena kualitas produk kami lebih bagus dibanding yang lain. Akhirnya kami dibina Dinas UMKM, Perindustrian, dan perdagangan kabupaten Bekasi. Hingga kini Unggul Mukti Toys mash berjalan dengan lancar.",
+                facility: "Penyusunan Direktori Perusahaan Industri Mainan Anak (DIT.IAIKMKSK) Tahun 2022",
+                certification: "SNI",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram: @umtoys67",
+                marketplace: "-",
+                address: "Kp. Rawa Palangan, No.33 Rt 01/Rw06, Bekasi, Jawa Barat",
+                phone: "081238662957",
+                email: "-",
+                website: "www.unggulmuktipesona.blogspot.com"
+            },
+            {
+                id: 10,
+                name: "Zwageri Borneo",
+                logo: "MF",
+                logoImage: "Assets/ZWAGERI BORNEO/LOGO ZWAGERI.jpg",
+                imageUrl: "Assets/ZWAGERI BORNEO/ZWAGERI HOME DETAIL.jpeg", // Foto belum ditambahkan
+                images: [
+                    "Assets/ZWAGERI BORNEO/ZWAGERI HOME DETAIL.jpeg",
+                    "Assets/ZWAGERI BORNEO/ZWAGERI 2.jpeg",
+                    "Assets/ZWAGERI BORNEO/ZWAGERI 3.jpeg",
+                    "Assets/ZWAGERI BORNEO/ZWAGERI 4.jpeg",
+                ],
+                type: "Mainan",
+                category: "mainan",
+                location: "Kalimantan Timur",
+                description: "Zwageri Borneo berdiiri tahun 2016 namun secara legal baru melengkapi dokumen usaha pada tahun 2018. Usaha kami merupakan bentuk upaya pemanfaatan sumber kekayaan alam dari hasil hutan berupa limbah kayu secara bijak dan lestari, dengan tujuan untuk mengangkat potensi lokal menjadi produk unggulan kawasan perdesaan melalui industri kreatif dan pemberdayaan masyarakat sekitar.",
+                facility: "Penyusunan Direktori Perusahaan Industri Mainan Anak (DIT.IAIKMKSK) Tahun 2022",
+                certification: "SNI",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram: @zwageriborn",
+                marketplace: "-",
+                address: "Jl. Pahlawan RT06 Blok E Desa Manunggal Jaya, Kutai Kartanegara, Kalimantan Timur",
+                phone: "08125408172/082131014435",
+                email: "zwageriborneo@yahoo.com",
+                website: "-"
+            },
+            {
+                id: 11,
+                name: "Andil Toys",
+                logo: "BS",
+                logoImage: "Assets/ANDIL TOYS/Logo Andil Toys.png",
+                imageUrl: "Assets/ANDIL TOYS/ANDIL HOME DETAIL NEW.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/ANDIL TOYS/ANDIL HOME DETAIL NEW.png",
+                    "Assets/ANDIL TOYS/ANDIL 2.jpeg",
+                    "Assets/ANDIL TOYS/ANDIL 3.jpeg",
+                    "Assets/ANDIL TOYS/ANDIL 4.jpeg"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Barat",
+                description: " ANDIL TOYS didirikan pada tahun 2006 di Kota Bekasi. Kami memproduksi mainan anak dengan menggunakan bahan latex yang telah tersertifikasi, aman untuk digunakan anak, serta telah memiliki SNI.",
+                facility: "Sertifikasi SNI Mainan Anak (DIT.IAIKMKSK) Tahun 2022",
+                certification: "Sertifikasi ISO",
+                marketing: "Maklon/Menerima Pesanan",
+                socialMedia: "Instagram: @andilshop",
+                marketplace: "-",
+                address: " Kp.Pengasinan Gg.Mushollah No.31,KotaBekasi,Jawa Barat",
+                phone: "087770305330",
+                email: "Jajakuningan0892@gmail.com",
+                website: "-"
+            },
+            {
+                id: 12,
+                name: "Haula Toys",
+                logo: "ON",
+                logoImage: "Assets/PT HAULA SEJAHTERA/Logo Haula Toys HD+.webp",
+                imageUrl: "Assets/PT HAULA SEJAHTERA/HAULA TOYS HOME DETAIL.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PT HAULA SEJAHTERA/HAULA TOYS HOME DETAIL.png",
+                    "Assets/PT HAULA SEJAHTERA/HAULA TOYS 2.png",
+                    "Assets/PT HAULA SEJAHTERA/HAULA TOYS 3.png",
+                    "Assets/PT HAULA SEJAHTERA/HAULA TOYS 4.png"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "DKI Jakarta",
+                description: "PT Haula Sejahtera telah berdiri sejak tahun 1998 di Jakarta. Perusahaan kami merupakan produsen mainan anak dengan speialisasi alat peraga edukatif. Selain itu, kami juga membuka berbagai project kemitraan dibidang lainnya.Produk kami yang sudah memiliki brand dengan nama. Haula Toys terbuat dari kayu berkualitas yang telah tersertifikasi dengan standarisasi seperti TKDN, ISO, dan SNI dan telah menggunakan cat non-toxic sehingga aman digunakan oleh anak-anak. PT Haula Sejahtera juga memiliki brand lainnya seperti Haula Edu Center yang tidak hanya berfokus di bagian penjualan mainan edukasi, kami juga berusaha untuk memberikan manfaat kepada masyarakat sekitar dengan memberikan edukasi seperti seminar dan webinar terkait topik parenting dan bisnis. Selain itu kami juga mulai berekspansi di bidang pendidikan seperti Haula Daycare yang merupakan tempat penitipan anak dengan proses pengasuhan secara alami.",
+                facility: "Coaching Creative Business Incubator (CBI) 2023 (DIT.IAIKMKSK)",
+                certification: "Sertifikasi ISO",
+                marketing: "Maklon/Menerima Pesanan",
+                socialMedia: "Instagram : @haulatoys.id",
+                marketplace: "Shopee : haula_toys",
+                address: "Gedung Haula Toys, JL. Bekasi Timur Raya RT10/RW003,Kel.RawaBunga, Kec.Jatinegara,Kota Jakarta Timur",
+                phone: " 0811911713 / 08111116127",
+                email: "marketing.haulatoys@gmail.com",
+                website: "haulatoyss.carrd.co"
+            },
+            {
+                id: 13,
+                name: "MMF TOYS",
+                logo: "ON",
+                logoImage: "Assets/UD MMF TOYS/LOGO MMF.png",
+                imageUrl: "Assets/UD MMF TOYS/MMF HOME DETAIL.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/UD MMF TOYS/MMF HOME DETAIL.png",
+                    "Assets/UD MMF TOYS/MMF 2.png",
+                    "Assets/UD MMF TOYS/MMF 3.png",
+                    "Assets/UD MMF TOYS/MMF 4.png"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Barat",
+                description: " UD MMF TOYS didirikan pada tahun 2004 di Cikiwul Bantar Gebang, Bekasi. Produk kami boneka/ mainan anak berbagai macam bentuk. Produk kami memakai bahan yang berkualitas perpaduan import dan lokal serta dikerjakan SDM yang terlatih terampil dengan standart kualitas pengawasan yang ketat juga sudah ber SNI sehingga aman buat anak usia minimal 3 tahun keatas. UD MMF TOYS produknya sudah tersebar di berbagai agen distributor nasional kota kota besar di Jawa, Bali, Kalimantan, NTT, Sulawesi.",
+                facility: "Sertifikasi SNI Mainan Anak (DIT.IAIKMKSK) Tahun 2023",
+                certification: "SNI",
+                marketing: "Maklon/Menerima Pesanan",
+                socialMedia: "Instagram : @_mmftoys",
+                marketplace: "Shopee : haula_toys",
+                address: "Gedung Haula Toys, JL. Bekasi Timur Raya RT10/RW003,Kel.RawaBunga, Kec.Jatinegara,Kota Jakarta Timur",
+                phone: "081280705550",
+                email: "toysmmf@gmail.com",
+                website: "-"
+            },
+            {
+                id: 14,
+                name: "ABC Wooden Toys",
+                logo: "ON",
+                logoImage: "Assets/ABC WOODEN TOYS/LOGO ABC WOODEN.jpeg",
+                imageUrl: "Assets/ABC WOODEN TOYS/ABC WOODEN HOME DETAIL.jpg", // Foto belum ditambahkan
+                images: [
+                    "Assets/ABC WOODEN TOYS/ABC WOODEN HOME DETAIL.jpg",
+                    "Assets/ABC WOODEN TOYS/ABC WOODEN 2.jpg",
+                    "Assets/ABC WOODEN TOYS/ABC WOODEN 3.jpg",
+                    "Assets/ABC WOODEN TOYS/ABC WOODEN 4.jpeg"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "D.I Yogyakarta",
+                description: "ABC Wooden Toys merupakan usaha yang didirikan pada tahun 2003 dengan fokus pada pembuatan Alat Permainan Edukatif (APE). Sesuai dengan nama usahanya, seluruh produk yang dihasilkan diharapkan dapat menjadikan anak-anak Indonesia cerdas dan kreatif. Produk mainan ABC Wooden Toys sudah bersertifikasi merk, SNI, dan TKDN. ABC Woodentoys salah satunya misinua adalah menciptakan lapangan kerja bagi difabel, saat ini ada 4 karyawan difabel. Harapan kami bisa menjadi Sheltered Workshop mandiri bagi sahabat difabel.",
+                facility: "SNI Mainan Anak (DIT.IAIKMKSK) Tahun 2024",
+                certification: "SNI",
+                marketing: "Maklon/Menerima Pesanan",
+                socialMedia: "Instagram : @abcwoodentoys",
+                marketplace: "Shopee : ABCWoodenToys",
+                address: "Gedongkiwi MJ1/676, Mantrijeron, Yogyakarta 55142",
+                phone: "085877589634",
+                email: "abctoys.2012@gmail.com",
+                website: "www.abcwoodentoys.com"
+            },
+            {
+                id: 15,
+                name: "Fox and bunny",
+                logo: "ON",
+                logoImage: "Assets/FOX AND BUNNY/LOGO FOX AND BUNNY.jpeg",
+                imageUrl: "Assets/FOX AND BUNNY/FOX AND BUNNY HOME DETAIL.jpeg", // Foto belum ditambahkan
+                images: [
+                    "Assets/FOX AND BUNNY/FOX AND BUNNY HOME DETAIL.jpeg",
+                    "Assets/FOX AND BUNNY/FOX AND BUNNY 2.jpeg",
+                    "Assets/FOX AND BUNNY/FOX AND BUNNY 3.jpeg",
+                    "Assets/FOX AND BUNNY/FOX AND BUNNY 4.jpeg"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "D.I Yogyakarta",
+                description: "Fox and Bunny adalah brand yang memproduksi alat stimulasi tumbuh kembang anak berupa mainan busy book, playmat, edutetik wall decor dengan beragam aktivitas untuk anak beragam alat interaktif dengan material ramah anak lainnya, dalam mendukung orang tua membina anak-anak diusia emas.",
+                facility: "Pameran ISFEX 2025, Pameran ISSS 2025",
+                certification: "SNI, ISO",
+                marketing: "Maklon/Menerima Pesanan",
+                socialMedia: "Instagram : @proteam_indonesia",
+                marketplace: "Tokopedia : Proteam indonesia",
+                address: "Jl. Raya Surabaya - Malang Km 52-53,Sukorejo, Pasuruan 67161, Indonesia",
+                phone: "0343632810",
+                email: "proteamballs@yahoo.com",
+                website: "proteam-balls.com"
+            },
+            {
+                id: 16,
+                name: "PT. Guru Mainan Edukatif",
+                logo: "ON",
+                logoImage: "Assets/PT Guru Mainan Edukatif/LOGO Guru Mainan.jpg",
+                imageUrl: "Assets/PT Guru Mainan Edukatif/Guru Mainan Home Detail.jpeg", // Foto belum ditambahkan
+                images: [
+                    "Assets/PT Guru Mainan Edukatif/Guru Mainan Home Detail.jpeg",
+                    "Assets/PT Guru Mainan Edukatif/Guru Mainan 2.jpeg",
+                    "Assets/PT Guru Mainan Edukatif/Guru Mainan 3.jpeg",
+                    "Assets/PT Guru Mainan Edukatif/Guru Mainan 4.jpeg"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Barat",
+                description: "PT Guru Mainan Edukatif adalah perusahaann yang bergerak dibidang mainan edukatif dan alat berkebutuhan khusus. Kami selalu berusaha untuk memenuhi kebutuhan untuk anak-anak mendapatkan mainan yang melatih kreatifitas dan alat kebutuhan khusus untuk keperluan terapi anak berkebutuhan khusus.Semua produk PT Guru Mainan Edukatif sudah memiliki sertifikat SNI (Standar Nasional Indonesia).",
+                facility: "Pameran Halal Indonesia Expo 2025, Pameran Trade Expo Indonesia 2025",
+                certification: "SNI",
+                marketing: "Maklon/Menerima Pesanan",
+                socialMedia: "Instagram : @gurumainanedukatif",
+                marketplace: "Shopee : gurumainanedukatif",
+                address: "Kampung Kalisuren RT.002/003 Desa Kalisuren, Kec. Tajurhalang, Kab. Bogor",
+                phone: "0217304633",
+                email: "-",
+                website: "www.guru.co.id"
+            },
+            {
+                id: 17,
+                name: "Chateda Toys",
+                logo: "ON",
+                logoImage: "Assets/CHATEDA TOYS/LOGO CHATEDA TOYS.jpg",
+                imageUrl: "Assets/CHATEDA TOYS/CHATEDA HOME DETAIL.jpeg", // Foto belum ditambahkan
+                images: [
+                    "Assets/CHATEDA TOYS/CHATEDA HOME DETAIL.jpeg",
+                    "Assets/CHATEDA TOYS/CHATEDA 2.jpeg",
+                    "Assets/CHATEDA TOYS/CHATEDA 3.jpeg",
+                    "Assets/CHATEDA TOYS/CHATEDA 4.jpeg"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Barat",
+                description: "Chateda Toys memulai produksi pertamanya untuk Mainan Anak pada tahun 2000. Produksi pertama yang dibuat adalah Blok Susun Satuan, Aksesoris Blok (Microplay), Puzzle, String Up, Rumah Boneka Muslim Ka'bah dan Rumah Boneka Masjid, Boneka Doa, Puzzle Masjid, dan lainnya. Kemudian Chateda Toys mulai merambah pasar alat permainan edukatif (APE) Nusantara Indonesia Blok Susun, Pakaian Adat, Puzzle Lantai Kepulauan di Indonesia, dan permainan kartu. Chateda melihat peluang tersebut ketika permintaan mainan cukup tinggi dan pesaing di jenis mainan ini masih belum banyak. Semua produk Chateda Toys telah melalui proses uji coba yang panjang, mulai dari konsep, pembuatan model mainan, studi proses bermain anak, hingga pemenuhan persyaratan sertifikasi SNI (Standar Nasional Indonesia) dan ISO 9001-2008.",
+                facility: "Pameran Halal Indonesia Expo 2025, Pameran Trade Expo Indonesia 2025",
+                certification: "SNI dan ISO",
+                marketing: "Maklon/Menerima Pesanan",
+                socialMedia: "Instagram : @chatedatoys",
+                marketplace: "Shopee : chatedatoys",
+                address: "Villa Jatibening Tol Blok KH 08, RT.008/RW.003, Jatibening, Kec. Pondokgede, Kota Bks, Jawa Barat 17412, Bekasi Bekasi , Indonesia",
+                phone: "02184997732",
+                email: "pt.chateda@yahoo.com",
+                website: "chatedatoys.com"
+            },
+            {
+                id: 18,
+                name: "CV. Warty Karya Toys",
+                logo: "ON",
+                logoImage: "Assets/CV. Warty Karya Toys/LOGO CV WARTY KARYA.jpeg",
+                imageUrl: "Assets/CV. Warty Karya Toys/CV WARTY KARYA HOME DETAIL.jpeg", // Foto belum ditambahkan
+                images: [
+                    "Assets/CV. Warty Karya Toys/CV WARTY KARYA HOME DETAIL.jpeg",
+                    "Assets/CV. Warty Karya Toys/CV WARTY KARTI 2.jpeg",
+                    "Assets/CV. Warty Karya Toys/CV WARTY KARYA 3.jpeg",
+                    "Assets/CV. Warty Karya Toys/CV WARTY KARYA 4.jpeg"
+                ],
+                type: "Mainan",
+                category: "Mainan",
+                location: "Jawa Barat",
+                description: "CV. Warti Karya Toys didirikan pada tahun 2007 di bogor, jawa barat. Kami merupakan produsen mainan anak berupa boneka, terbuat dari bahan rasfur, pelboa, yelpo, neylex, dengan isian full dakron yang telah tersertifikasi, aman untuk digunakan anak 3 tahun ke atas , serta telah memiliki SNI. Kami juga memasarkan pada skala nasional seperti Balikpapan, Palembang, Jambi dan daerah lainnya. Kami juga menjalin kolaborasi mitra bisnis.",
+                facility: "Sertifikasi SNI Mainan Anak",
+                certification: "SNI",
+                marketing: "Langsung dan Menerima Pesanan",
+                socialMedia: "Instagram : @rumah_bonekabogor",
+                marketplace: "-",
+                address: "Jln. Ciawi Sukabumi, Km 1, Bakom Rt002/Rw005, Bojong Kerta, Bogor Selatan, Jawa Barat",
+                phone: "081511510508",
+                email: "Putuindah1313@gmail.com",
+                website: "-"
+            },
+            {
+                id: 19,
+                name: "PT. Inkor Bola Pacific",
+                logo: "ON",
+                logoImage: "Assets/ALAT OLAHRAGA/PT INKOR BOLA PASIFIC/INKOR LOGO.png",
+                imageUrl: "Assets/ALAT OLAHRAGA/PT INKOR BOLA PASIFIC/INKOR HOME DETAIL.jpeg", // Foto belum ditambahkan
+                images: [
+                    "Assets/ALAT OLAHRAGA/PT INKOR BOLA PASIFIC/INKOR HOME DETAIL.jpeg",
+                    "Assets/ALAT OLAHRAGA/PT INKOR BOLA PASIFIC/INKOR 2.jpeg",
+                    "Assets/ALAT OLAHRAGA/PT INKOR BOLA PASIFIC/INKOR 3.jpeg",
+                    "Assets/ALAT OLAHRAGA/PT INKOR BOLA PASIFIC/INKOR 4.png",
+                    "Assets/ALAT OLAHRAGA/PT INKOR BOLA PASIFIC/INKOR 5.png",
+                ],
+                type: "Alat Olahraga",
+                category: "Alat olahraga",
+                location: "Jawa Timur",
+                description: "PT. Inkor Bola Pacific merupakan pabrik bola terbesar dan eksportir bola yang memenuhi standar bola olahraga yang ada di Indonesia. PT. Inkor Bola Pacific memproduksi bola basket, bola sepak, bola voli, bola futsal, bola rugby, netball, dan handball yang menggunakan logo paten dan trademark Proteam dan Tachikara, lisensi dari Jepang. PT Inkor Bola Pacific telah dipercaya untuk menjadi sponsor berbagai kegiatan olahraga, Salah satunya DBL (Development Basketball League) dari tahun  2005 sampai sekarang. Kami juga mendapatkan sertifikasi SNI dan berbagai standar internasional.",
+                facility: "Pameran Trade Expo Indonesia 2022, Pameran ISSS 2025, Pameran ISFEX 2025",
+                certification: "SNI, Iso.",
+                marketing: "Maklon/Menerima Pesanan",
+                socialMedia: "Instagram : @proteam_indonesia",
+                marketplace: "Tokopedia : Proteam indonesia",
+                address: "Jl. Raya Surabaya - Malang Km 52-53, Sukorejo, Pasuruan 67161, Indonesia",
+                phone: " 0343632810",
+                email: "proteamballs@yahoo.com",
+                website: "proteam-balls.com"
+            },
+            {
+                id: 20,
+                name: "RUGONAL",
+                logo: "ON",
+                logoImage: "Assets/ALAT OLAHRAGA/RUGONAL/LOGO RUGONAL.jpeg",
+                imageUrl: "Assets/ALAT OLAHRAGA/RUGONAL/RUGONAL HOME DETAIL.webp", // Foto belum ditambahkan
+                images: [
+                    "Assets/ALAT OLAHRAGA/RUGONAL/RUGONAL HOME DETAIL.webp",
+                    "Assets/ALAT OLAHRAGA/RUGONAL/RUGONAL 2.png",
+                    "Assets/ALAT OLAHRAGA/RUGONAL/RUGONAL 3.png",
+                    "Assets/ALAT OLAHRAGA/RUGONAL/RUGONAL 4.png",
+                ],
+                type: "Alat Olahraga",
+                category: "Alat olahraga",
+                location: "Jawa Barat",
+                description: "RUGONAL adalah produsen Karet/Rubber yang merancang serta memproduksi suku cadang karet dan lantai karet untuk beragam kebutuhan seperti Rubber Flooring untuk Athletic Track, Gymflex, Soft Facilities, Commercial Area, Rubber Bumper, Rubber Sheet, Anti-Slip Rubber Mat. Produk-produk RUGONAL dibuat dengan standar kualitas tinggi, dirancang untuk ketahanan jangka panjang, keamanan, serta mendukung kenyamanan dan performa optimal dalam berbagai aktivitas olahraga maupun penggunaan komersial.",
+                facility: "Pameran ISSS 2025, Pameran ISFEX 2025",
+                certification: "-",
+                marketing: "Maklon/Menerima Pesanan",
+                socialMedia: "Instagram : @rugonaldotcom",
+                marketplace: "-",
+                address: "Jl. Cinyosog Raya No.89 RT.002 RW.002 BURANGKENG, SETU KAB. BEKASI JAWA BARAT",
+                phone: "082123467828",
+                email: "sales@rugonal.id",
+                website: "rugonal.com"
+            },
+            {
+                id: 21,
+                name: "SHIAMIQ",
+                logo: "ON",
+                logoImage: "Assets/ALAT OLAHRAGA/SHIAMIQ/LOGO SHIAMIQ.jpeg",
+                imageUrl: "Assets/ALAT OLAHRAGA/SHIAMIQ/SHIAMIQ HOME DETAIL.jpeg", // Foto belum ditambahkan
+                images: [
+                    "Assets/ALAT OLAHRAGA/SHIAMIQ/SHIAMIQ HOME DETAIL.jpeg",
+                    "Assets/ALAT OLAHRAGA/SHIAMIQ/SHIAMIQ 2.jpeg",
+                    "Assets/ALAT OLAHRAGA/SHIAMIQ/SHIAMIQ 3.jpeg",
+                ],
+                type: "Alat Olahraga",
+                category: "Alat olahraga",
+                location: "Jawa Tengah",
+                description: "CV SHIAMIQ TERANG ABADI, perusahaan yang bergerak di bidang manufaktur meja tenis meja dan peralatan alat-alat olahraga lainnya. Berdiri sejak tahun 2003 yang pada saat itu dikenal dengan nama Gunawan Industry. Pada saat berdirinya, Gunawan Industry bergerak hanya dalam produksi meja tenis meja dengan merk SHIAMIQ. Pada tahun 2015, CV SHIAMIQ TERANG ABADI berhasil meraih sertifikasi SNI (Standar Nasional Indonesia) untuk produk Meja Tenis Meja dan dengan demikian menjadikan CV SHIAMIQ TERANG ABADI sebagai produsen meja tenis meja pertama yang memiliki sertifikasi SNI di Indonesia. Ini merupakan salah satu bukti keseriusan CV SHIAMIQ TERANG ABADI untuk terus menjaga standar kualitasnya.",
+                facility: "Pameran ISSS 2025, Pameran ISFEX 2025",
+                certification: "SNI",
+                marketing: "Maklon/Menerima Pesanan",
+                socialMedia: "Instagram : @shiamiqsport.solo",
+                marketplace: "-",
+                address: "Jalan Poksai RT 01 / RW 06 Desa Triyagan (Belakang Gudang Bulog Jaten), Kecamatan Mojolaban, Sukoharjo, Jawa Tengah, Indonesia",
+                phone: "02718203726",
+                email: "sta.shiamiq@gmail.com",
+                website: "shiamiq.com"
+            },
+            {
+                id: 22,
+                name: "Abalaba Climbing Walls",
+                logo: "ON",
+                logoImage: "Assets/ALAT OLAHRAGA/ABALABA/LOGO ABALABA.jpg",
+                imageUrl: "Assets/ALAT OLAHRAGA/ABALABA/ABALABA HOME DETAIL.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/ALAT OLAHRAGA/ABALABA/ABALABA HOME DETAIL.png",
+                    "Assets/ALAT OLAHRAGA/ABALABA/ABALABA 2.png",
+                    "Assets/ALAT OLAHRAGA/ABALABA/ABALABA 3.png",
+                    "Assets/ALAT OLAHRAGA/ABALABA/ABALABA 4.png",
+                ],
+                type: "Alat Olahraga",
+                category: "Alat olahraga",
+                location: "Jawa Barat",
+                description: "ABALABA Climbing Walls berdiri sejak tahun 2000, kami menjadi perusahaan pertama di Asia yang memproduksi papan panjat terbuat dari Fiberglass dan Resin Panel untuk olah raga dan kejuaraan panjat dinding. Abalaba selalu berpartisipasi pada setiap kejuaraan panjat tebing atau dalam berbagai kompetisi baik lokal, nasional maupun kawasan Asia sejak tahun 2001. Abalaba Climbing Wall merupakan partner dari Federasi Panjat Tebing Indonesia (FPTI) dan Singapore Mountaineering Federation.",
+                facility: "Pameran ISSS 2025, Pameran ISFEX 2025",
+                certification: "SNI",
+                marketing: "Maklon/Menerima Pesanan",
+                socialMedia: "Instagram : @shiamiqsport.solo",
+                marketplace: "-",
+                address: "Jl. Cigadung Raya Barat No.8A Bandung 40191 Jawa Barat, Indonesia",
+                phone: "08112201362",
+                email: "abalabasw@gmail.com",
+                website: "abalabaclimbingwalls.com"
+            },
+            {
+                id: 23,
+                name: "Alini",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/ALINI/LOGO ALINI.jpeg",
+                imageUrl: "Assets/PERHIASAN/ALINI/ALINI HOME DETAIL.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/ALINI/ALINI HOME DETAIL.png",
+                    "Assets/PERHIASAN/ALINI/ALINI 2.png",
+                    "Assets/PERHIASAN/ALINI/ALINI 3.png",
+                    "Assets/PERHIASAN/ALINI/ALINI 4.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "DKI Jakarta",
+                description: "Alini adalah usaha mikro berbasis pemberdayaan masyarakat pra sejahtera dengan mengelola limbah kain perca menjadi produk aksesoris yang memiliki nilai ekonomis yang tinggi.",
+                facility: "Pameran Produk Industri Perhiasan dalam Negeri 2022",
+                certification: "SNI",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram : @alinifashionethnic",
+                marketplace: "Zalora : alini",
+                address: "Jalan Menteng Tenggulun Rt006 Rw010 No.3 Menteng, Jakarta Pusat",
+                phone: "081289081550",
+                email: "iskandar.alini@gmail.com",
+                website: "-"
+            },
+            {
+                id: 24,
+                name: "Astini",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/ASTINA/LOGO ASTINA.jpg",
+                imageUrl: "Assets/PERHIASAN/ASTINA/ASTINA HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/ASTINA/ASTINA HOME.png",
+                    "Assets/PERHIASAN/ASTINA/ASTINA 2.png",
+                    "Assets/PERHIASAN/ASTINA/ASTINA 3.png",
+                    "Assets/PERHIASAN/ASTINA/ASTINA 4.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Bali",
+                description: "Astina silver berdiri sejak 2018 di Desa Celuk, Sukawati, Gianyar. Merupakan produsen barang perhiasan perak seperti cincin, gelang, liontin, dan lainnya. Dengan memakai bahan baku perak yang diproduksi perusahan dalam negeri dengan kualitas yang terjamin. Produk kami telah dipasarkan ke Australia, Eropa, dan Amerika. Astina Silver siap menjalin kerja sama dengan mitra bisnis.",
+                facility: "Pameran Produk Industri Perhiasan dalam Negeri 2022",
+                certification: "SNI",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram : @astinasilver",
+                marketplace: "shopee : astinasilver",
+                address: "JJl. Mengaling Gg. Pendet No.5, Celuk, Kec. Sukawati, Kabupaten Gianyar, Bali 80582",
+                phone: "081337555323",
+                email: "astinasilver1122@gmail.com",
+                website: "astinasilverclass.com"
+            },
+            {
+                id: 25,
+                name: "Blue Safir Baru",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/BSB/LOGO BSB.jpg",
+                imageUrl: "Assets/PERHIASAN/BSB/BSB HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/BSB/BSB HOME.png",
+                    "Assets/PERHIASAN/BSB/BSB 2.png",
+                    "Assets/PERHIASAN/BSB/BSB 3.png",
+                    "Assets/PERHIASAN/BSB/BSB 4.png",
+                    "Assets/PERHIASAN/BSB/BSB 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Kalimantan Selatan",
+                description: "Blue Safir Baru didirikan pada tahun 1997 di Martapura Kabupaten Banjar, merupakan produsen perhiasan berlian dan baru permata. Produk terbuat dari intan mentah diolah digosok menjadi berlian dan terus diolah lagi menjadi perhiasan bahan dari silver dan emas yang sudah tersertifikasi, memiliki sertifikat untuk pemasaran dalam negeri dan luar negeri.",
+                facility: "Surabaya International Jewelry Fair 2025",
+                certification: "-",
+                marketing: "Langsung ke konsumen",
+                socialMedia: "Instagram : @bluesafirbaru_jewelry",
+                marketplace: "shopee : astinasilver",
+                address: "Pertokoan CBS no 3 blok D Martapura kota, Kalimantan Selatan",
+                phone: "081250067000",
+                email: "najibmisfir2016@gmail.com",
+                website: "-"
+            },
+            {
+                id: 26,
+                name: "Dezza's Silver",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/Dezza/LOGO DEZZA.jpg",
+                imageUrl: "Assets/PERHIASAN/Dezza/DEZZA HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/Dezza/DEZZA HOME.png",
+                    "Assets/PERHIASAN/Dezza/DEZZA 2.png",
+                    "Assets/PERHIASAN/Dezza/DEZZA 3.png",
+                    "Assets/PERHIASAN/Dezza/DEZZA 4.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "D.I Yogyakarta",
+                description: "Dezza'silver meurpakan usaha kerajinan logam terutama perak, didirikan pada tahun 2008 di kotagede yogyakarta yang merupakan sentra kerjaninan perak. Kerajinan logam yang utama adalah perhiasan khusus design wanita eropa dengan kombinasi batu mulia. Kami juga melayani pesanan untuk merchandise dengan design craving maupun fellegry",
+                facility: "Surabaya International Jewelry Fair 2025",
+                certification: "-",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram : @metalcraftgallery",
+                marketplace: "-",
+                address: "Jl.Karanglo no.66 Kotagede Yogyakarta",
+                phone: "08882731477",
+                email: "eddyprazt66@gmail.com",
+                website: "-"
+            },
+            {
+                id: 27,
+                name: "Gelap Ruang Jiwa",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/Gelap Ruang/LOGO RUANG.jpg",
+                imageUrl: "Assets/PERHIASAN/Gelap Ruang/RUANG HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/Gelap Ruang/RUANG HOME.png",
+                    "Assets/PERHIASAN/Gelap Ruang/RUANG 2.png",
+                    "Assets/PERHIASAN/Gelap Ruang/RUANG 3.png",
+                    "Assets/PERHIASAN/Gelap Ruang/RUANG 4.png",
+                    "Assets/PERHIASAN/Gelap Ruang/RUANG 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Jawa Barat",
+                description: "Karya-karya Gelap Ruang Jiwa bagaikan analogi jiwa dan raga, dengan mengedepankan ciri khas visual yang minim cahaya dan gelap gulita, namun terkadang nampak teduh dan melankolis.",
+                facility: "Pameran Produk Industri Perhiasan dalam Negeri 2022",
+                certification: "Sertifikat Merek dagang",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram : @gelap.ruang  jiwa",
+                marketplace: "-",
+                address: "Jalan Kiara Sari Raya no 27 Bandung",
+                phone: "085173133124",
+                email: "ruangjiwa.official@gmail.com",
+                website: "gelapruangjiwa.com"
+            },
+            {
+                id: 28,
+                name: "Kallama Art",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/Kallama/LOGO KALLAMA.png",
+                imageUrl: "Assets/PERHIASAN/Kallama/KALLAMA HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/Kallama/KALLAMA HOME.png",
+                    "Assets/PERHIASAN/Kallama/KALLAMA 2.png",
+                    "Assets/PERHIASAN/Kallama/KALLAMA 3.png",
+                    "Assets/PERHIASAN/Kallama/KALLAMA 4.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Jawa Barat",
+                description: "Kallama Art didirikan tahun 2016 di Cilengsi, Kabupaten Bogor. Bermula dari hobi membuat aksesoris, akhirnya mulai dijual secara online di Facebook dan Instagram, dan juga mengikuti bazaar. Produk kami terbuat dari batu natural asli Indonesia yang diikat dengan kawat tembaga. Produk yang dihasilkan berupa kalung, bros, gelang, cincin, strapmasker. Target market kami adalah para wanita dewasa yang menyukai fashion dengan usia 20-50 tahun.",
+                facility: "Pameran Produk Industri Perhiasan dalam Negeri",
+                certification: "Sertifikat Merek dagang",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram : @kallama_art",
+                marketplace: "shopee : lizalestari04",
+                address: "Griya Cipeucang blok D1 no 10. RT 19 RW 09. Cileungsi Kab Bogor",
+                phone: "081319336326",
+                email: "lizalestari04@gmail.com",
+                website: "-"
+            },
+            {
+                id: 29,
+                name: "Koto Batu",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/Koto Batu/LOGO KOTOBATU.jpg",
+                imageUrl: "Assets/PERHIASAN/Koto Batu/KOTOBATU HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/Koto Batu/KOTOBATU HOME.png",
+                    "Assets/PERHIASAN/Koto Batu/KOTOBATU 2.png",
+                    "Assets/PERHIASAN/Koto Batu/KOTOBATU 3.png",
+                    "Assets/PERHIASAN/Koto Batu/KOTOBATU 4.png",
+                    "Assets/PERHIASAN/Koto Batu/KOTOBATU 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "DKI Jakarta",
+                description: "Koto Batu berdiri pada akhir tahun 2019 di Jakarta. Koto Batu merupakan brand perhiasan handmade yang dibuat langsung oleh lokal artisan. Tiap desain yang dihasilkan terbatas dan memiliki efek healing bagi yang menggunakannya. Pada tahun 2021 Koto Batu telah terbentuk PT dengan nama PT Koto Pulao Nusantara dan bekerjasama dengan perajinan perak untuk membuat perhiasan dengan bahan dasar batu alam dan perak. Koto Batu telah dipasarkan di toko-toko retail beberapa kota di Indonesia dan juga dipasarkan secara Online.",
+                facility: "Pameran Produk Industri Perhiasan dalam Negeri 2022",
+                certification: "Sertifikat Merek dagang",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram : @koto.batu",
+                marketplace: "shopee : kotobatu",
+                address: "Jl. Arteri Permata Hijau No.11, DKI Jakarta",
+                phone: "082112796569",
+                email: "kotobatu.id@gmail.com",
+                website: "-"
+            },
+            {
+                id: 30,
+                name: "Little Two",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/LITTLE TWO/LOGO LITTLE TWO.jpg",
+                imageUrl: "Assets/PERHIASAN/LITTLE TWO/LITTLE TWO HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/LITTLE TWO/LITTLE TWO HOME.png",
+                    "Assets/PERHIASAN/LITTLE TWO/LITTLE TWO 2.png",
+                    "Assets/PERHIASAN/LITTLE TWO/LITTLE TWO 3.png",
+                    "Assets/PERHIASAN/LITTLE TWO/LITTLE TWO 4.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Malang",
+                description: "Little Two berdiri pada tahun 2019, di Pasuruan Jawa Timur. Kami merupakan produsen aksesoris berbahan dasar batu alam, mutiara air tawar, dan kristal swarovski. Produk kami dapat dijumpai di marketplace dan kami juga pernah menerima order dari Luar negeri.",
+                facility: "Pameran Produk IKM Kerajinan BCIC Gandaria City 2022",
+                certification: "-",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram : @littletwo.co",
+                marketplace: "shopee : littletwo.co",
+                address: "MOG (Mall Olympic Garden) Ground Floor GFS-14 , Malang",
+                phone: "083833125475",
+                email: "design.littletwo@gmail.com",
+                website: "littletwo.my.canva.site"
+            },
+            {
+                id: 31,
+                name: "Lolo Silver",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/LOLO/LOGO LOLO.jpg",
+                imageUrl: "Assets/PERHIASAN/LOLO/LOLO HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/LOLO/LOLO HOME.png",
+                    "Assets/PERHIASAN/LOLO/LOLO 2.png",
+                    "Assets/PERHIASAN/LOLO/LOLO 3.png",
+                    "Assets/PERHIASAN/LOLO/LOLO 4.png",
+                    "Assets/PERHIASAN/LOLO/LOLO 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Bali",
+                description: "Lolo Silver didirikan pada tahun 1992 di Celuk Sukawati Gianyar Bali. Kami merupakan pengrajin emas dan perak.",
+                facility: "Pameran Jakarta Jewelry Fair 2025",
+                certification: "-",
+                marketing: "Langsung dan Maklon",
+                socialMedia: "Instagram : @lolosilver",
+                marketplace: "-",
+                address: "Jln jagaraga no 26 celuk sukawati gianyar bali",
+                phone: "082144177946",
+                email: "juliannugrahaaa@gmail.com",
+                website: "-"
+            },
+            {
+                id: 32,
+                name: "CV. Maharani Craft",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/MAHARANI/LOGO MAHARANI.png",
+                imageUrl: "Assets/PERHIASAN/MAHARANI/MAHARANI HOME.jpg", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/MAHARANI/MAHARANI HOME.jpg",
+                    "Assets/PERHIASAN/MAHARANI/MAHARANI 2.jpg",
+                    "Assets/PERHIASAN/MAHARANI/MAHARANI 3.jpg",
+                    "Assets/PERHIASAN/MAHARANI/MAHARANI 4.jpg",
+                    "Assets/PERHIASAN/MAHARANI/MAHARANI 5.jpg",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Bali",
+                description: "Sejak 29 Oktober 2005, CV. Maharani telah menjadi perusahaan produsen dan eksportir aksesoris, perhiasan perak dengan desain etnik dan kontemporer,Untuk terus melestarikan awal cerita, pada bulan Desember2015, Maharani meluncurkan lini perhiasan bernama MANIKA.",
+                facility: "Pameran Produk Industri Perhiasan dalam Negeri 2022",
+                certification: "SVLK dan Fair Trade WFTO.",
+                marketing: "Langsung ke konsumen.",
+                socialMedia: "Instagram : @maharanicraft.bali, @manikabali",
+                marketplace: "shopee : CV MAHARANI",
+                address: "Jl. Tangkuban Perahu, Gg. Merta Sedana No. 7, Denpasar, Bali",
+                phone: "0361730676",
+                email: "maharanicraft.bali@gmail.com, info@manikabali.com",
+                website: "maharanihandicraft.com, manikabali.com"
+            },
+            {
+                id: 33,
+                name: "Mahkota Jewelry",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/MAHKOTA/LOGO MAHKOTA.jpg",
+                imageUrl: "Assets/PERHIASAN/MAHKOTA/MAHKOTA HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/MAHKOTA/MAHKOTA HOME.png",
+                    "Assets/PERHIASAN/MAHKOTA/MAHKOTA 2.png",
+                    "Assets/PERHIASAN/MAHKOTA/MAHKOTA 3.png",
+                    "Assets/PERHIASAN/MAHKOTA/MAHKOTA 4.png",
+                    "Assets/PERHIASAN/MAHKOTA/MAHKOTA 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "D.I Yogyakarta",
+                description: "Mahkota Jewelry berdiri sejak tahun 2018 di Kotagede, Yogyakarta. Kami merupakan produsen kerajinan logam dengan spesialisasi cincin pertunangan dan pernikahan. Produk kami terbuat dari silver, emas, emas putih, platinum, dan palladium yang telah diuji keasliaannya. Kami juga menawarkan custom design cincin sesuai dengan request customer. Produk kami juga telah dipasarkan di mancanegara seperti Singapura dan Australia. Kami terbuka untuk menjalin kolaborasi mitra bisnis.",
+                facility: "Surabaya International Jewelry Fair 2025",
+                certification: "-.",
+                marketing: "Langsung ke konsumen.",
+                socialMedia: "Instagram : @mahkotajewelry.id",
+                marketplace: "shopee : mahkotajewelry.id",
+                address: "Jl. Kemasan No.42, Prenggan, Kec. Kotagede, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55172",
+                phone: "089667811640",
+                email: "mahkotasilverjogjakarta@gmail.com",
+                website: "-"
+            },
+            {
+                id: 34,
+                name: "Ottilia Pearls",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/OTTILIA/LOGO OTTILIA.jpg",
+                imageUrl: "Assets/PERHIASAN/OTTILIA/OTTILIA HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/OTTILIA/OTTILIA HOME.png",
+                    "Assets/PERHIASAN/OTTILIA/OTTILIA 2.png",
+                    "Assets/PERHIASAN/OTTILIA/OTTILIA 3.png",
+                    "Assets/PERHIASAN/OTTILIA/OTTILIA 4.png",
+                    "Assets/PERHIASAN/OTTILIA/OTTILIA 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "NTB",
+                description: "Ottilia Pearls didirikan pada tahun 2018 di kota Mataram (Lombok), merupakan salah satu brand lokal Lombok yang fokus pada perhiasan mutiara dengan menggunanakan berbagai material seperti emas, perak, atau rhodium dengan bekerja sama dengan pengrajin lokal emas dan perak di Lombok. Kami memiliki customer dari seluruh Indonesia maupun di luar negeri.",
+                facility: "Pameran Produk Industri Perhiasan dalam Negeri 2022",
+                certification: "-.",
+                marketing: "Langsung dan maklon.",
+                socialMedia: "Instagram : @ottiliapearls",
+                marketplace: "shopee : ottiliapearls",
+                address: "Kompleks Taman Sejahtera Jalan Taman Sejahtera IX no 5 Mataram, NTB",
+                phone: "082237719350",
+                email: "ottiliapearls@gmail.com",
+                website: "-"
+            },
+            {
+                id: 35,
+                name: "Pyo Jewelry",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/PYO/LOGO PYO.jpg",
+                imageUrl: "Assets/PERHIASAN/PYO/PYO HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/PYO/PYO HOME.png",
+                    "Assets/PERHIASAN/PYO/PYO 2.png",
+                    "Assets/PERHIASAN/PYO/PYO 3.png",
+                    "Assets/PERHIASAN/PYO/PYO 4.png",
+                    "Assets/PERHIASAN/PYO/PYO 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Sumatera Selatan",
+                description: "Usaha yang dirintis sejak 2015 ini menawarkan 2 lini produk heritage dan contemporary. Heritage dibuat atas rasa bangga kepada budaya Indonesia seperti Perhiasan antik peninggalan Sriwijaya. Dalam koleksi Contemporary seperti perhiasan kalung dan gelang yang dibuat dari batu alam khas sumatera dan mutiara laut Indonesia. Lewat koleksi ini, kami ingin mengajak kita menghargai budaya dan alam tanah air kita.",
+                facility: "Surabaya International Jewelry Fair 2025",
+                certification: "-.",
+                marketing: "Langsung dan maklon.",
+                socialMedia: "Instagram : @pyo_jewelry",
+                marketplace: "shopee : pyo.pyo.pyo",
+                address: "KOMPLEK BUKIT SEJAHTERA POLIGON Jalan Palem Raja VI blok AH no 09 bukit Lama Ilir Barat 1 Palembang Sumatera Selatan 30139",
+                phone: "085749404441",
+                email: "pyojewelry@gmail.com",
+                website: "pyojewelry.com"
+            },
+            {
+                id: 36,
+                name: "Semomondeezy Handmade",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/Semomon/LOGO SEMOMONDEEZY.png",
+                imageUrl: "Assets/PERHIASAN/Semomon/SEMOMONDEEZY HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/Semomon/SEMOMONDEEZY HOME.png",
+                    "Assets/PERHIASAN/Semomon/SEMOMONDEEZY  2.png",
+                    "Assets/PERHIASAN/Semomon/SEMOMONDEEZY  3.png",
+                    "Assets/PERHIASAN/Semomon/SEMOMONDEEZY  4.png",
+                    "Assets/PERHIASAN/Semomon/SEMOMONDEEZY  5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Jawa Barat",
+                description: "Berdiri pada tahun 2009, berawal dari hobi membuat pernak-pernik yang menghadirkan bentuk aksesoris seperti kalung, gelang, tali masker, maupun sling bag. produk kami terbuat dari bahan daur ulang kain perca. Dengan modal yang terbatas hobi ini kini sudah popular berkat strategi pemasarannya yang mengandalkan akun media sosial. Melihat respon pasar yang positif , bisnis ini sudah melakukan export ke beberapa negara seperti USA, Australia, Belanda, dan UK. Bahkan kami sudah berpartisipasi pada pameran luar negeri seperti New york 2019, Ambiente Fair, German(2020) dan Dubai Expo (2021)",
+                facility: "Pameran Produk Industri Perhiasan dalam Negeri 2022",
+                certification: "Merk.",
+                marketing: "Langsung dan maklon.",
+                socialMedia: "Instagram : @semomondeezy",
+                marketplace: "shopee : semomondeezyhandmade_2009",
+                address: "Jl. Nagrong RT02 RW16, Kampung Nagrong, Desa Muncang, Sudonghilir",
+                phone: "081290274704",
+                email: "miralisme@yahoo.com",
+                website: "-",
+            },
+            {
+                id: 37,
+                name: "Suteja Silver",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/SUTEJA/LOGO SUTEJA.jpg",
+                imageUrl: "Assets/PERHIASAN/SUTEJA/SUTEJA HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/SUTEJA/SUTEJA HOME.png",
+                    "Assets/PERHIASAN/SUTEJA/SUTEJA 2.png",
+                    "Assets/PERHIASAN/SUTEJA/SUTEJA 3.png",
+                    "Assets/PERHIASAN/SUTEJA/SUTEJA 4.png",
+                    "Assets/PERHIASAN/SUTEJA/SUTEJA 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Bali",
+                description: "Suteja silver berdiri secara resmi pada tahun 2008 di Celuk, Sukawati, Gianyar, Bali. Sudah beroperasi pada tahun 1970 yang didirikan I Made Suteja, dan kini sudah dilanjutkan oleh generasi ketiga. Kami menyediakan beragam perhiasan maupun table decor dengan bahan dasar perak maupun kombinasi unsur lain (kerang,kayu) dengan perak, dikerjakan secara manual maupun menggunakan teknologi terkini, ciri khas kami merupakan ukiran Bali, sudah mulai dipasarkan secara nasional maupun internasional.",
+                facility: "Pameran Surabaya International Jewelry Fair 2025",
+                certification: "-",
+                marketing: "Langsung dan maklon.",
+                socialMedia: "Instagram : @sutejasilver, @suteja_silver",
+                marketplace: "shopee : sutejasilver",
+                address: "Jl. Raya Celuk No.12, Celuk, Sukawati, Gianyar, Bali.",
+                phone: "081238161617",
+                email: "miralisme@yahoo.com",
+                website: "-",
+            },
+            {
+                id: 39,
+                name: "Ungga Creative Lombok",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/UNGGA/LOGO UNGGA.jpg",
+                imageUrl: "Assets/PERHIASAN/UNGGA/UNGGA HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/UNGGA/UNGGA HOME.png",
+                    "Assets/PERHIASAN/UNGGA/UNGGA 2.png",
+                    "Assets/PERHIASAN/UNGGA/UNGGA 3.png",
+                    "Assets/PERHIASAN/UNGGA/UNGGA 4.png",
+                    "Assets/PERHIASAN/UNGGA/UNGGA 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "NTB",
+                description: "Ungga Creative bergerak dibidang produksi dan menjual hasil kerajinan tangan yang dihasilkan oleh para pengrajin yang ada di kampung sendiri, yakni Desa Ungga, berupa kain tenun dan perhiasan dari logam perak yang dikombinasi dengan mutiara laut asli. Berdiri pada tahun 2016 dan sudah mampu menampung hasil dari 45 pengrajin yang ada di Desa Ungga dan bisa menampung produk dari luar  kampung juga.",
+                facility: "Pameran produk Industri Perhiasan dalam Negeri 2022",
+                certification: "-",
+                marketing: "Langsung dan maklon.",
+                socialMedia: "Instagram : @unggacreative_lombok",
+                marketplace: "shopee : unggacreativelombok22",
+                address: "Jl.Raya Ungga Tunak Malang Desa Ungga, Lombok Tengah, Nusa Tenggara Barat.",
+                phone: "081907673000",
+                email: "unggacreative96@gmail.com",
+                website: "desty.store/unggacreative",
+            },
+            {
+                id: 40,
+                name: "Borneo Queen Community",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/BORNEO/LOGO BORNEO.jpg",
+                imageUrl: "Assets/PERHIASAN/BORNEO/BORNEO HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/BORNEO/BORNEO HOME.png",
+                    "Assets/PERHIASAN/BORNEO/BORNEO 2.png",
+                    "Assets/PERHIASAN/BORNEO/BORNEO 3.png",
+                    "Assets/PERHIASAN/BORNEO/BORNEO 4.png",
+                    "Assets/PERHIASAN/BORNEO/BORNEO 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Kalimantan Tengah",
+                description: "Ungga Creative bergerak dibidang produksi dan menjual hasil kerajinan tangan yang dihasilkan oleh para pengrajin yang ada di kampung sendiri, yakni Desa Ungga, berupa kain tenun dan perhiasan dari logam perak yang dikombinasi dengan mutiara laut asli. Berdiri pada tahun 2016 dan sudah mampu menampung hasil dari 45 pengrajin yang ada di Desa Ungga dan bisa menampung produk dari luar  kampung juga.",
+                facility: "Pameran produk Industri Perhiasan dalam Negeri 2022",
+                certification: "-",
+                marketing: "Langsung dan maklon.",
+                socialMedia: "Instagram : @borneoqueen_community",
+                marketplace: "-",
+                address: "Jl.MH. Thambrin no. 16 Palangka Raya, Kalimantan Tengah.",
+                phone: "081251878636",
+                email: "Borneoqueen1@gmail.com",
+                website: "-",
+            },
+            {
+                id: 41,
+                name: "Maza Handcrafted Pearl and Jewelry",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/MAZA/LOGO MAZA.jpg",
+                imageUrl: "Assets/PERHIASAN/MAZA/MAZA HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/MAZA/MAZA HOME.png",
+                    "Assets/PERHIASAN/MAZA/MAZA 2.png",
+                    "Assets/PERHIASAN/MAZA/MAZA 3.png",
+                    "Assets/PERHIASAN/MAZA/MAZA 4.png",
+                    "Assets/PERHIASAN/MAZA/MAZA 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "NTB",
+                description: "Maza Handcrafted Pearl and Jewelry adalah Usaha yang bergerak dibidang Perhiasan dan asesoris berbahan dasar mutiara, usaha kami berdiri sejak th 2013,yang berawal dari JASTIP,menjadi reseler salah satu toko,sekarang kami sudah memiliki galeri yanga ada di komplek pertokoan buumi kodya asri,jl.Gajah Mada blok B-10,Jempong Mataram,produk kami dikerjakan oleh tangan tangan terampil dengan sepenuh hati, dan menggunakan bahan baku mutiara yang berkualitas,kami mengali ide dengan mwnerpakndalamdisainprodakdarikearifanbudaya dan potensi alam daerah Lombok,kami berharap dengan produk kami bisa meceritakan semua potensi alam maupun budaya Pulau Lombok.",
+                facility: "Pameran produk Industri Perhiasan dalam Negeri",
+                certification: "-",
+                marketing: "Langsung dan maklon.",
+                socialMedia: "Instagram : @mazapearlJewelry",
+                marketplace: "shopee : mazapearlandjewelry",
+                address: "Komplek Pertokoan Bumi Kodya Asri blok B-10jl.Gajah MadaJempog BaruSekarbelaMataramNTB.",
+                phone: "081239690015",
+                email: "madamaharani@gmail.com",
+                website: "mazapearl.com",
+            },
+            {
+                id: 42,
+                name: "Bhumi Pearl Jewelry",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/Bhumi/LOGO BHUMI.png",
+                imageUrl: "Assets/PERHIASAN/Bhumi/BHUMI HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/Bhumi/BHUMI HOME.png",
+                    "Assets/PERHIASAN/Bhumi/BHUMI 2.png",
+                    "Assets/PERHIASAN/Bhumi/BHUMI 3.png",
+                    "Assets/PERHIASAN/Bhumi/BHUMI 4.png",
+                    "Assets/PERHIASAN/Bhumi/BHUMI 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "NTB",
+                description: "Bhumi Pearl Jewelry didirikan pada tahun 2017 di Lombok NTB. Kami membuat perhiasan berbahan emas, perak, dan tembaga sepuh, kolaborasi dengan batu alam dan mutiara asli. Kami juga membuat perhiasan dengan bahan kulit kerangyang diukir. Desai perhiasan kami terinspirasi dari alam dengan motif tumbuh tumbuhan. sebagian besar perhiasan yang kami tidak memproduksi massal, rata-rata memesan perhiasan secara custom.",
+                facility: "Pameran Perhiasan Surabaya International Jewelry Fair 2024",
+                certification: "Sertifikat Merek dagang",
+                marketing: "Pasar digital.",
+                socialMedia: "Instagram : @bhumi_pearljewelry",
+                marketplace: "shopee : oktinamutiara",
+                address: "Grand Khayangan A5, NTB.",
+                phone: "081259210129",
+                email: "mutiaraoktina307@gmail.com",
+                website: "-",
+            },
+            {
+                id: 43,
+                name: "By Ash Jewellery",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/BY ASH/LOGO BY ASH.jpg",
+                imageUrl: "Assets/PERHIASAN/BY ASH/ASH HOME.jpeg", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/BY ASH/ASH HOME.jpeg",
+                    "Assets/PERHIASAN/BY ASH/ASH 2.jpeg",
+                    "Assets/PERHIASAN/BY ASH/ASH 3.jpeg",
+                    "Assets/PERHIASAN/BY ASH/ASH 4.jpeg",
+                    "Assets/PERHIASAN/BY ASH/ASH 5.jpeg",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Bali",
+                description: "PT. Putri Bali Legacy berdiri tahun 2023 di Gianyar Bali. Kami merupakan produsen perhiasan berbahan stainless steel dengan kombinasi mutiara air tawar. Saat ini kami terbuka untuk menjalin kolaborasi nasional maupun internasional.",
+                facility: "Pameran Perhiasan Surabaya International Jewelry Fair 2024",
+                certification: "-",
+                marketing: "Pasar digital.",
+                socialMedia: "Instagram : @byashjewelery",
+                marketplace: "shopee : byashjewelery",
+                address: "Jl smki gang mawar no 8, batubulan, gianyar, bali",
+                phone: "085737383671",
+                email: "byash.jewelry@gmail.com",
+                website: "-",
+            },
+            {
+                id: 44,
+                name: "Dian Art",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/Dian Art/LOGO DIAN ART.jpg",
+                imageUrl: "Assets/PERHIASAN/Dian Art/DIAN HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/Dian Art/DIAN HOME.png",
+                    "Assets/PERHIASAN/Dian Art/DIAN 2.png",
+                    "Assets/PERHIASAN/Dian Art/DIAN 3.png",
+                    "Assets/PERHIASAN/Dian Art/DIAN 4.png",
+                    "Assets/PERHIASAN/Dian Art/DIAN 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Jawa Timur",
+                description: "CV. Kirana Karya Nusantara memiliki brand UMKM yang bernama Dian Art yang berasal dari Surabaya. Saat ini terdapat dua lokasi usaha Dian Art yaitu di Surabaya dan sidoarjo. Selain aktif mengikuti bazar, pemasaran juga dilakukan dengan jalur media sosial.",
+                facility: "Pameran Perhiasan Surabaya International Jewelry Fair 2024",
+                certification: "Sertifikat merek",
+                marketing: "Pasar digital.",
+                socialMedia: "Instagram : @bdian.art.aksesoris",
+                marketplace: "-",
+                address: "Jl. Manukan Lor 2-i No 14 Surabaya",
+                phone: "085232222716",
+                email: "dian,art08@gmail.com",
+                website: "dianartpro.blogspot.com", 
+            },
+            {
+                id: 45,
+                name: "DIFTRIA ART CRAFTING",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/Diftria/LOGO DIFTRIA.jpg",
+                imageUrl: "Assets/PERHIASAN/Diftria/DIFITRIA HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/Diftria/DIFITRIA HOME.png",
+                    "Assets/PERHIASAN/Diftria/DIFITRIA 3.png",
+                    "Assets/PERHIASAN/Diftria/DIFITRIA 4.png",
+                    "Assets/PERHIASAN/Diftria/DIFITRIA 5.png",
+                    "Assets/PERHIASAN/Diftria/DIFITRIA 6.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Banten",
+                description: "Difitria Art Crafting bergerak dibidang pembuatan aksesoris handmade wanita yang bermaterialkan batu alam dan mutiara air tawar yang dalam beberapa kondisi produknya dilakukan perpaduan dengan batik dan kain tenin sesuai kebutuhan atau permintaan pasar.",
+                facility: "-",
+                certification: "-",
+                marketing: "Pasar digital.",
+                socialMedia: "Instagram : @diftria_art_crafting",
+                marketplace: "diftriacraft",
+                address: "Jl.Kihajardewantoro No.78 RT.03 RW.01",
+                phone: "089609776613",
+                email: "enny.wah77@gmail.com",
+                website: "-", 
+            },
+            {
+                id: 46,
+                name: "Dinar Ethnic",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/DINAR/LOGO DINAR.jpg",
+                imageUrl: "Assets/PERHIASAN/DINAR/DINAR HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/DINAR/DINAR HOME.png",
+                    "Assets/PERHIASAN/DINAR/DINAR 2.png",
+                    "Assets/PERHIASAN/DINAR/DINAR 3.png",
+                    "Assets/PERHIASAN/DINAR/DINAR 4.png",
+                    "Assets/PERHIASAN/DINAR/DINAR 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Jawa Timur",
+                description: "Merupakan produsen aksesoris dengan brand Dinar Ethni Jewelry karya disain yang tematik dan unik, berbasiskan budaya Indonesia yang klasik dan modern. Banyaknya produk aksesoris impor pabrikan merupakan tantangan tersendiri untuk tetap konsisten menghasilkan desai yang update, Bahan utama yang digunakan yaitu batu alam, mutiara. Jenis produk yang dimiliki yaitu kalung, gelang, cincin, dan anting.",
+                facility: "Pameran Jewelry & Gem World Hongkong",
+                certification: "-",
+                marketing: "Pasar digital.",
+                socialMedia: "Instagram : @dinarjewelry",
+                marketplace: "Shopee : dnatiqa",
+                address: "Jl.Medokan Sawah Timur III NO 34B, Jawa Timur",
+                phone: "08121727206",
+                email: "accessoriesdinar@gmail.com",
+                website: "-", 
+            },
+            {
+                id: 47,
+                name: "DSW Jewellery Bali",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/DSW/LOGO DSW.jpg",
+                imageUrl: "Assets/PERHIASAN/DSW/DSW HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/DSW/DSW HOME.png",
+                    "Assets/PERHIASAN/DSW/DSW 2.png",
+                    "Assets/PERHIASAN/DSW/DSW 3.png",
+                    "Assets/PERHIASAN/DSW/DSW 4.png",
+                    "Assets/PERHIASAN/DSW/DSW 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Bali",
+                description: "Didirikan pada tahun akhir 2019, namun sudah memulai usaha ini secara sederhana pada 2006 dimana saat itu fokis membuat custom jewellery. Semua desain dikerjakan sendiri.Saat ini kami telah memiliki klien selain dari lokal ada juga dari beberapa negara. .",
+                facility: "Pameran Surabaya International Jewelry Fair 2025",
+                certification: "-",
+                marketing: "Pasar digital dan Langsung",
+                socialMedia: "Instagram : @dswjewellerybali",
+                marketplace: "Shopee : Dewata Sekar Wisesa",
+                address: "Jl. Pasekan Gang Batu Beji Blok D No. 8 Br. Batuaji, Batubulan Kangin, Sukawati Gianyar 80582, Bali",
+                phone: "081353805522",
+                email: "dswjewellerybali@gmail.com",
+                website: "www.dswjewellerybali.com", 
+            },
+            {
+                id: 48,
+                name: "Nadha Jewelry",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/NADHA/LOGO NADHA.jpg",
+                imageUrl: "Assets/PERHIASAN/NADHA/NADHA HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/NADHA/NADHA HOME.png",
+                    "Assets/PERHIASAN/NADHA/NADHA 2.png",
+                    "Assets/PERHIASAN/NADHA/NADHA 3.png",
+                    "Assets/PERHIASAN/NADHA/NADHA 4.png",
+                    "Assets/PERHIASAN/NADHA/NADHA 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "DKI Jakarta",
+                description: "Nadha Jewelry adalah brand yang membuat perhiasan dengan teknik handmad. Kami mendesign sendiri semua produk perhiasannya seperi kalung, gelang, cincin, anting, bros. Visi kedepan kami akan memperkenalkan desain jewelry kami dari tradisional ke mancanegara lebih luas lagi. Dan saat ini kami sedang mengembangkan produk yang bisa diterima pasar anak-anak muda dengan harga yang terjangkau.",
+                facility: "Pameran Jewellery Gem World Hong Kong 2024",
+                certification: "-",
+                marketing: "Pasar digital",
+                socialMedia: "Instagram : @nadhajewelry",
+                marketplace: "Shopee : Nadha Jabu Etnik",
+                address: "Jl. Pegangsaan Dua, Kelapa Gadng, Jakarta Utara",
+                phone: "085880708120",
+                email: "Nadhajewelry@gmail.com",
+                website: "www.nadhajewelry.com", 
+            },
+            {
+                id: 49,
+                name: "Nara's Beads Collection",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/NARA'S/LOGO NARAS.jpg",
+                imageUrl: "Assets/PERHIASAN/NARA'S/NARAS HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/NARA'S/NARAS HOME.png",
+                    "Assets/PERHIASAN/NARA'S/NARAS 2.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "DKI Jakarta",
+                description: "Nara's Beads Collection didirikan di Jakarta. Kami membuat produk aksesoris berupa kalung, gelas, bros, dan sebagainya dengan menggunakan bahan baku mutiara, batu, dan sejenisnya yang berkualitas. Produk aksesoris dari NBC sudah dipasarkan pada acara berskala nasional dan internasional.",
+                facility: "Pameran perhiasan Surabaya (SIJF)",
+                certification: "HAKI",
+                marketing: "Pasar digital",
+                socialMedia: "Instagram : @naras_bead",
+                marketplace: "Shopee : Nara's Beads Collection",
+                address: "Jalan Merak nomor G2 RT 01 RW 02 kecamatan Palmerah kelurahan Palmerah Komplek Hankam Slipi Jakarta Barat 11480",
+                phone: "089640093855",
+                email: "rohyani.ichwan@gmail.com",
+                website: "-", 
+            },
+            {
+                id: 50,
+                name: "Sekar bali jewelry",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/SEKARBALI/LOGO SEKARBALI.jpg",
+                imageUrl: "Assets/PERHIASAN/SEKARBALI/SEKARBALI HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/SEKARBALI/SEKARBALI HOME.png",
+                    "Assets/PERHIASAN/SEKARBALI/SEKARBALI 2.png",
+                    "Assets/PERHIASAN/SEKARBALI/SEKARBALI 3.png",
+                    "Assets/PERHIASAN/SEKARBALI/SEKARBALI 4.png",
+                    "Assets/PERHIASAN/SEKARBALI/SEKARBALI 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Bali",
+                description: "Sekar Bali Jewelry merupakan UKM perhiasan berbahan dasar logam mulia emas dan perak yang pengerjaanya masih handmade. Sekar Bali Jewelry tentu berusaha terus berinovasi dan menciptakan design-design terbaik dan juga teta menjaga kualitas produk demi kenyamanan pelanggan kami.",
+                facility: "Pameran perhiasan Surabaya (SIJF)",
+                certification: "-",
+                marketing: "Pasar digital",
+                socialMedia: "Instagram : @sekarbalijewelry",
+                marketplace: "-",
+                address: "Jl. Dukuh, Singapadu, Kec. Sukawati, Kabupaten Gianyar, Bali 80582",
+                phone: "081353624742",
+                email: "sekarbalijewellery@gmail.com",
+                website: "dswjewellery.com", 
+            },
+            {
+                id: 51,
+                name: "Sense of Jewels",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/SENSE/LOGO SENSE.jpg",
+                imageUrl: "Assets/PERHIASAN/SENSE/SENSE HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/SENSE/SENSE HOME.png",
+                    "Assets/PERHIASAN/SENSE/SENSE 2.png",
+                    "Assets/PERHIASAN/SENSE/SENSE 3.png",
+                    "Assets/PERHIASAN/SENSE/SENSE 4.png",
+                    "Assets/PERHIASAN/SENSE/SENSE 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Bali",
+                description: "Sense of Jewels berdiri sejak 2023 berpusat di Denpasar, Bali. Kami perusahaan yang memproduksi karya tangan berupa perhiasan (handmade jewelry) yang terbuat dari benang, manik-manik, batu, dan lainnya. Material yang kami gunakan sangat berkualitas dan memperhatikan kenyamanan khususnya kulit sehingga akan aman dan terhindar dari alergi. Kami sangat terbuka untuk menjalin kerja sama dan menjalin mitra bisnis di Seluruh dunia.",
+                facility: "Pameran perhiasan Surabaya (SIJF)",
+                certification: "-",
+                marketing: "Pasar digital",
+                socialMedia: "Instagram : @sekarbalijewelry",
+                marketplace: "-",
+                address: "Jl. Dukuh, Singapadu, Kec. Sukawati, Kabupaten Gianyar, Bali 80582",
+                phone: "081353624742",
+                email: "sekarbalijewellery@gmail.com",
+                website: "dswjewellery.com", 
+            },
+            {
+                id: 52,
+                name: "Magus",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/MAGUS/LOGO MAGUS.jpg",
+                imageUrl: "Assets/PERHIASAN/MAGUS/MAGUS HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/MAGUS/MAGUS HOME.png",
+                    "Assets/PERHIASAN/MAGUS/MAGUS 2.png",
+                    "Assets/PERHIASAN/MAGUS/MAGUS 3.png",
+                    "Assets/PERHIASAN/MAGUS/MAGUS 4.png",
+                    "Assets/PERHIASAN/MAGUS/MAGUS 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "D.I Yogyakarta",
+                description: "Di MAGUSTREASUREs Untuk Keberuntungan & Persahabatan, kami percaya bahwa perhiasan lebih dari sekadar aksesori perhiasan membawa makna, energi, dan ikatan istimewa. Gelang batu permata buatan tangan kami dirancang untuk membawa keberuntungan, kepositifan, dan persahabatan yang langgeng bagi mereka yang memakainya. Setiap perhiasan dibuat dengan cermat menggunakan batu permata alami berkualitas tinggi, masing-masing dipilih karena keindahan dan energinya yang unik. Baik Anda mencari jimat pribadi, hadiah yang bermakna untuk teman, atau gelang bergaya yang memiliki makna mendalam, kami punya sesuatu yang istimewa untuk Anda.",
+                facility: "Pameran Trade Expo Indonesia",
+                certification: "Sertifikat Merek Dagang",
+                marketing: "Pasar digital",
+                socialMedia: "Instagram : @magustreasure",
+                marketplace: "Shopee : belanjamagus",
+                address: "Jln. Sumberadi mlati sleman, DI Yogyakarta",
+                phone: "082225212863",
+                email: "magustreasure@gmail.com",
+                website: "-", 
+            },
+            {
+                id: 53,
+                name: "OG Jewelry",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/OG/LOGO OG.png",
+                imageUrl: "Assets/PERHIASAN/OG/OG HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/OG/OG HOME.png",
+                    "Assets/PERHIASAN/OG/OG 2.png",
+                    "Assets/PERHIASAN/OG/OG 3.png",
+                    "Assets/PERHIASAN/OG/OG 4.png"
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Jawa Timur",
+                description: "Sejak 2014, OG Jewelry telah mendefinisikan ulang dunia perhiasan wanita dengan desain autentik yang terinspirasi oleh budaya Indonesia yang semarak.Batu permata kami, yang diolah dengan penuh perhatian dan dibuat dengan cinta, menghadirkan optimisme dan keanggunan dalam setiap karya. Bergabunglah dengan kami dan biarkan perhiasan kami menceritakan kisah Anda.",
+                facility: "Pameran Trade Expo Indonesia 2025",
+                certification: "-",
+                marketing: "Pasar digital dan Langsung",
+                socialMedia: "Instagram : @ogjewelry.id",
+                marketplace: "Shopee : og2020",
+                address: "OG Gallery jalan Sunan Gunung Jati RT.03/RW.04, Bengkal, Tanjungsari, Pacitan, Pachitan, Jawa Timur, Indonesia 63518",
+                phone: "08113038980",
+                email: "ogpacitan@gmail.com",
+                website: "ogjewelryindonesia.com", 
+            },
+            {
+                id: 54,
+                name: "Concha",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/CONCHA/LOGO CONCHA.jpg",
+                imageUrl: "Assets/PERHIASAN/CONCHA/CONCHA HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/CONCHA/CONCHA HOME.png",
+                    "Assets/PERHIASAN/CONCHA/CONCHA 2.png",
+                    "Assets/PERHIASAN/CONCHA/CONCHA 3.png",
+                    "Assets/PERHIASAN/CONCHA/CONCHA 4.png",
+                    "Assets/PERHIASAN/CONCHA/CONCHA 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "NTB",
+                description: "COncha Dari Laut untuk cerita baru, adalah sebuah cerita tentang proses, harapan, dan segala hal yang akan membuat kamu tersenyum ketika memakainya. Cocha bukan sekedar nama dan rumah untuk berkreasi. Kami percaya bahwa keindahan harus datang dari proses yang sadar dengan memilih bahan yang berkelanjutan, menghargai alam dan pengrajin lokal.",
+                facility: "Pameran Surabaya International Jewelry Fair 2025",
+                certification: "-",
+                marketing: "Pasar digital, dan langsung",
+                socialMedia: "Instagram : @concha.id",
+                marketplace: "Shopee : concha.id",
+                address: "Jl. Pesantren No.14 Dsn Tegal",
+                phone: "087739227729",
+                email: "info@studioconcha.com",
+                website: "-", 
+            },
+            {
+                id: 55,
+                name: "Vite",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/VITE/LOGO VITE.jpg",
+                imageUrl: "Assets/PERHIASAN/VITE/VITE HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/VITE/VITE HOME.png",
+                    "Assets/PERHIASAN/VITE/VITE 2.png",
+                    "Assets/PERHIASAN/VITE/VITE 3.png",
+                    "Assets/PERHIASAN/VITE/VITE 4.png",
+                    "Assets/PERHIASAN/VITE/VITE 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "DKI Jakarta",
+                description: "Vite adalah perusahaan yang bisnis utamanya adalah mengembangkan produk-produk filigree perak 925 eksklusif dari Indonesia. Kami terus berinovasi untuk memenuhi kepuasan pelanggan hingga saat ini. Produk kami 100% buatan tangan Indonesia, kreatif dalam desain, inovatif dalam kreativitas, namun tetap fungsional. Semua produk kami dipilih dari bahan-bahan berkualitas tinggi dan telah diseleksi secara menyeluruh di gudang kami sebelum dikirim ke pembeli dan pelanggan di seluruh dunia. Kami juga memberikan layanan sesuai permintaan klien, baik dengan desain mereka sendiri maupun pesanan khusus.",
+                facility: "Pameran Surabaya International Jewelry Fair 2025",
+                certification: "Seritifikat Merek Dagang",
+                marketing: "Pasar digital",
+                socialMedia: "Instagram : @vite.jewelry",
+                marketplace: "-",
+                address: "Jl. Petogogan II No. 39 B, Pulo Kebayoran Baru Jakarta Selatan 12160",
+                phone: "08119966696",
+                email: "vite0099@gmail.com",
+                website: "vite.oniecraft.com",   
+            },
+            {
+                id: 56,
+                name: "Kiki Gerssom",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/KIKI/LOGO KIKI.jpg",
+                imageUrl: "Assets/PERHIASAN/KIKI/KIKI HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/KIKI/KIKI HOME.png",
+                    "Assets/PERHIASAN/KIKI/KIKI 2.png",
+                    "Assets/PERHIASAN/KIKI/KIKI 3.png",
+                    "Assets/PERHIASAN/KIKI/KIKI 4.png",
+                    "Assets/PERHIASAN/KIKI/KIKI 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Jawa Timur",
+                description: "KIKI GERSSOM terinspirasi oleh keindahan warisan budaya Indonesia. Material-material yang digabungkan dalam koleksi ini memiliki tampilan organik dari kerang, tampilan klasik dari mutiara, tampilan alami dari batu asli, dan tampilan kulit yang kokoh. Dikombinasikan dengan swarovski yang memberikan kesan glamor, kuningan berlapis emas, dan rhodium putih. Setiap perhiasan dibuat dengan indah dengan tangan, penuh cinta, dan perhatian. Setiap material dipadukan dengan cermat untuk menghasilkan karya seni yang indah dan unik.",
+                facility: "Pameran Surabaya International Jewelry Fair 2025",
+                certification: "Seritifikat Merek Dagang",
+                marketing: "Pasar digital",
+                socialMedia: "Instagram : @kikigerssom",
+                marketplace: "-",
+                address: "JL WIRYAKUSUMA NO.7, Jawa Timur",
+                phone: "081808000886",
+                email: "kikigerssom9@gmail.com",
+                website: "-",   
+            },
+            {
+                id: 57,
+                name: "Setia Pearl",
+                logo: "ON",
+                logoImage: "Assets/PERHIASAN/KIKI/LOGO KIKI.jpg",
+                imageUrl: "Assets/PERHIASAN/KIKI/KIKI HOME.png", // Foto belum ditambahkan
+                images: [
+                    "Assets/PERHIASAN/KIKI/KIKI HOME.png",
+                    "Assets/PERHIASAN/KIKI/KIKI 2.png",
+                    "Assets/PERHIASAN/KIKI/KIKI 3.png",
+                    "Assets/PERHIASAN/KIKI/KIKI 4.png",
+                    "Assets/PERHIASAN/KIKI/KIKI 5.png",
+                ],
+                type: "Perhiasan",
+                category: "Perhiasan",
+                location: "Jawa Timur",
+                description: "KIKI GERSSOM terinspirasi oleh keindahan warisan budaya Indonesia. Material-material yang digabungkan dalam koleksi ini memiliki tampilan organik dari kerang, tampilan klasik dari mutiara, tampilan alami dari batu asli, dan tampilan kulit yang kokoh. Dikombinasikan dengan swarovski yang memberikan kesan glamor, kuningan berlapis emas, dan rhodium putih. Setiap perhiasan dibuat dengan indah dengan tangan, penuh cinta, dan perhatian. Setiap material dipadukan dengan cermat untuk menghasilkan karya seni yang indah dan unik.",
+                facility: "Pameran Surabaya International Jewelry Fair 2025",
+                certification: "Seritifikat Merek Dagang",
+                marketing: "Pasar digital",
+                socialMedia: "Instagram : @kikigerssom",
+                marketplace: "-",
+                address: "JL WIRYAKUSUMA NO.7, Jawa Timur",
+                phone: "081808000886",
+                email: "kikigerssom9@gmail.com",
+                website: "-",   
+            },
+            
+        ];
 
-                async function fetchProducts() {
-                    const { data, error } = await supabase.from('products').select('*');
-                    if (error) {
-                        console.error('Supabase fetch error:', error.message);
-                        products = [];
-                    } else {
-                        products = data || [];
-                    }
-                    currentProducts = [...products];
-                    renderProducts();
-                }
+        let currentProducts = [...products];
 
-                // Initial fetch from Supabase
-                fetchProducts();
-
-                function getTotalPages() {
-                    return Math.ceil(currentProducts.length / itemsPerPage);
-                }
-
-                function getPageItems() {
-                    const startIndex = (currentPage - 1) * itemsPerPage;
-                    return currentProducts.slice(startIndex, startIndex + itemsPerPage);
-                }
-
-                function updatePaginationControls() {
-                    const totalPages = getTotalPages();
-                    const prevButton = document.getElementById('prevPage');
-                    const nextButton = document.getElementById('nextPage');
-                    const pageNumbers = document.getElementById('pageNumbers');
-
-                    prevButton.disabled = currentPage === 1 || totalPages === 0;
-                    nextButton.disabled = currentPage === totalPages || totalPages === 0;
-
-                    pageNumbers.innerHTML = '';
-
-                    if (totalPages <= 3) {
-                        for (let i = 1; i <= totalPages; i++) {
-                            const button = document.createElement('button');
-                            button.textContent = i;
-                            button.onclick = () => goToPage(i);
-                            if (i === currentPage) button.classList.add('active');
-                            pageNumbers.appendChild(button);
-                        }
-                    } else {
-                        let start = currentPage - 1;
-                        if (start < 1) start = 1;
-                        if (start > totalPages - 2) start = totalPages - 2;
-
-                        for (let i = start; i <= start + 2; i++) {
-                            const button = document.createElement('button');
-                            button.textContent = i;
-                            button.onclick = () => goToPage(i);
-                            if (i === currentPage) button.classList.add('active');
-                            pageNumbers.appendChild(button);
-                        }
-
-                        if (start + 2 < totalPages) {
-                            const ell = document.createElement('span');
-                            ell.className = 'ellipsis';
-                            ell.textContent = '...';
-                            pageNumbers.appendChild(ell);
-                        }
-                    }
-                }
-
-                function changePage(direction) {
-                    if (direction === 'prev' && currentPage > 1) {
-                        currentPage--;
-                    } else if (direction === 'next' && currentPage < getTotalPages()) {
-                        currentPage++;
-                    }
-                    renderProducts();
-                }
-
-                function goToPage(page) {
-                    currentPage = page;
-                    renderProducts();
-                }
-                
         // Navigation Function
         function showPage(pageName) {
             document.querySelectorAll('main > section').forEach(section => {
@@ -1622,5 +3018,5 @@
         renderProducts();
     </script>
 </body>
-
 </html>
+
